@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations Briefing — Week of 2026-05-08 · Airnest</title>
+<script src="gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Exo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --charcoal:      #131110;
+    --charcoal-mid:  #1f1b18;
+    --charcoal-soft: #2d2723;
+    --border-dark:   #3a322b;
+    --cream:         #f9f8f6;
+    --cream-dark:    #f0ede8;
+    --sand:          #ddd3c5;
+    --text:          #2a2622;
+    --text-muted:    #7a6e64;
+    --gold:          #c49a52;
+    --gold-light:    #f5ead8;
+    --gold-mid:      #e8d5a8;
+    --terracotta:    #b85c38;
+    --terra-light:   #f8ede7;
+    --olive:         #6b7a48;
+    --olive-light:   #edf0e5;
+    --blue-muted:    #4a6880;
+    --blue-light:    #e8eef5;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Exo', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--charcoal);
+    color: var(--cream);
+    padding: 40px 52px 36px;
+    position: relative;
+  }
+  header::after {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0; left: 52px; right: 52px;
+    height: 1px;
+    background: var(--border-dark);
+  }
+  .header-logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 34px;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 5px;
+  }
+  header .sub {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .header-meta {
+    display: flex;
+    gap: 0;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border-dark);
+    padding-top: 16px;
+  }
+  .header-meta-item {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    padding-right: 24px;
+    margin-right: 24px;
+    border-right: 1px solid var(--border-dark);
+    line-height: 1.8;
+  }
+  .header-meta-item:last-child { border-right: none; margin-right: 0; }
+  .header-meta-item strong { color: rgba(249,248,246,0.85); font-weight: 500; display: block; }
+
+  /* ── LAYOUT ── */
+  main { max-width: 760px; margin: 0 auto; padding: 44px 32px 72px; }
+
+  .section-label {
+    font-family: 'Exo', system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 44px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--sand);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  /* ── BULLET LIST ── */
+  .brief-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: #fff;
+    border: 1px solid var(--sand);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .brief-list li {
+    list-style: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 13px 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    border-bottom: 1px solid var(--cream-dark);
+  }
+  .brief-list li:last-child { border-bottom: none; }
+  .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+  .dot-olive    { background: var(--olive); }
+  .dot-gold     { background: var(--gold); }
+  .dot-terra    { background: var(--terracotta); }
+  .dot-blue     { background: var(--blue-muted); }
+
+  /* ── NEXT BLOCK ── */
+  .next-block {
+    background: var(--charcoal);
+    color: rgba(249,248,246,0.82);
+    border-radius: 10px;
+    padding: 22px 28px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .next-block strong { color: var(--cream); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 28px;
+    font-size: 11px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--sand);
+  }
+
+  /* ── PRINT ── */
+  @media print {
+    body { background: white; }
+    header, .next-block {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    main { padding: 20px 24px 32px; }
+    .section-label { margin-top: 24px; margin-bottom: 12px; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-logo">Airnest · Operations</div>
+  <h1>Operations Briefing<br><em style="font-style:italic;font-weight:300;">Week of 2026-05-08</em></h1>
+  <p class="sub">Tech &amp; Integration — Summary for CEO</p>
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>2026-05-01 → 2026-05-08</strong>Period</div>
+    <div class="header-meta-item"><strong>Luis Navarro</strong>Prepared by</div>
+    <div class="header-meta-item"><strong>Javier Navarro</strong>For</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── DONE ── -->
+  <div class="section-label">Done</div>
+
+  <ul class="brief-list">
+    <li>
+      <span class="dot dot-olive"></span>
+      Mews Certification Form submitted for Airnest Ops Connector (INT003752) — 2026-05-08
+    </li>
+    <li>
+      <span class="dot dot-olive"></span>
+      Review call with Milan Bezdecka (Mews TPSM) confirmed — appointment booked
+    </li>
+    <li>
+      <span class="dot dot-olive"></span>
+      Arena-Cielo confirmation mail template migrated into Mews via BEE JSON pipeline
+    </li>
+    <li>
+      <span class="dot dot-olive"></span>
+      BEE JSON generator pipeline built for Mews-native template import (reusable for remaining properties)
+    </li>
+    <li>
+      <span class="dot dot-olive"></span>
+      Import checklists and property mapping proposals completed for BGH, Arena-Cielo, Hotel-Emete, and Poem-Suites
+    </li>
+  </ul>
+
+  <!-- ── NEXT ── -->
+  <div class="section-label">Next</div>
+
+  <div class="next-block">
+    Review call with Milan is the critical path — <strong>provision webhook endpoint</strong>
+    (Hetzner VPS + FastAPI at <code style="font-family:monospace;font-size:12px;color:var(--gold)">webhooks.airnest.es</code>)
+    before the call to unblock production token issuance.
+    After call: remaining 5 properties kick-off with Anna.
+  </div>
+
+  <!-- ── BLOCKERS ── -->
+  <div class="section-label">Blockers</div>
+
+  <ul class="brief-list">
+    <li>
+      <span class="dot dot-terra"></span>
+      BGH confirmation mail template migration failed — needs investigation before re-import
+    </li>
+    <li>
+      <span class="dot dot-gold"></span>
+      Anna Adamczyk (Mews) asked for kick-off dates for remaining 7 properties (2026-05-06) — no reply sent yet
+    </li>
+  </ul>
+
+</main>
+
+<footer>
+  Airnest Homes SL · Confidential internal briefing · 2026-05-08
+</footer>
+
+</body>
+</html>

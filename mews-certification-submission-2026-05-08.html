@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mews Certification Submission — Airnest Ops Connector</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:        #0077BB;
+  --primary-bright: #00AADD;
+  --primary-glow:   rgba(0,170,221,0.22);
+  --primary-dim:    rgba(0,119,187,0.13);
+  --primary-faint:  rgba(0,119,187,0.055);
+  --text:           #d8e8f4;
+  --text-strong:    #edf5fc;
+  --muted:          #5a7a96;
+  --bg:             #07090d;
+  --surface:        #0c1420;
+  --surface-2:      #111c2a;
+  --surface-3:      #172535;
+  --border:         rgba(0,119,187,0.14);
+  --border-solid:   #182840;
+  --warn:           #FF5E2A;
+  --warn-glow:      rgba(255,94,42,0.2);
+  --warn-dim:       rgba(255,94,42,0.08);
+  --warn-border:    rgba(255,94,42,0.22);
+  --green:          #00CC7A;
+  --green-dim:      rgba(0,204,122,0.08);
+  --green-border:   rgba(0,204,122,0.22);
+  --amber:          #F5A020;
+  --amber-dim:      rgba(245,160,32,0.08);
+  --amber-border:   rgba(245,160,32,0.22);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Subtle noise overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body > * { position: relative; z-index: 1; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lineDraw {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+@keyframes pillPop {
+  0%   { opacity: 0; transform: scale(0.8) translateY(4px); }
+  65%  { transform: scale(1.05) translateY(0); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--surface);
+  padding: 52px 60px 46px;
+  border-bottom: 1px solid var(--border-solid);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient radial glow behind icon */
+header::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,119,187,0.11) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+/* Top chromatic line */
+header::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--primary) 30%, var(--primary-bright) 55%, transparent 100%);
+  opacity: 0.65;
+  animation: lineDraw 1.2s ease 0.1s both;
+}
+
+.header-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+  animation: fadeUp 0.65s ease both;
+}
+
+.header-left { flex: 1; }
+
+.brand-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.2s forwards;
+}
+.brand-tag::before {
+  content: '';
+  display: inline-block;
+  width: 28px; height: 1px;
+  background: var(--primary-bright);
+  opacity: 0.55;
+}
+
+.brand-wordmark { margin-bottom: 32px; }
+
+.brand-name {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 44px;
+  font-weight: 400;
+  color: var(--text-strong);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+
+.brand-connector {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-top: 7px;
+}
+
+.doc-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+  font-size: 30px;
+  color: var(--text);
+  font-weight: 400;
+  line-height: 1.22;
+  margin-bottom: 9px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease 0.35s forwards;
+}
+
+.doc-sub {
+  font-size: 12.5px;
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.45s forwards;
+}
+
+.header-icon {
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 16px rgba(0,170,221,0.5)) drop-shadow(0 0 40px rgba(0,119,187,0.22));
+  position: relative; z-index: 1;
+  margin-top: 8px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease 0.2s forwards;
+}
+
+.header-rule {
+  border: none;
+  border-top: 1px solid var(--border-solid);
+  margin: 32px 0 22px;
+  position: relative; z-index: 1;
+  opacity: 0;
+  animation: fadeUp 0.4s ease 0.5s forwards;
+}
+
+.header-meta {
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+  position: relative; z-index: 1;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.55s forwards;
+}
+
+.header-meta-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  padding-right: 28px;
+  margin-right: 28px;
+  border-right: 1px solid var(--border-solid);
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+}
+.header-meta-item:last-child { border-right: none; margin-right: 0; }
+.header-meta-item strong {
+  color: var(--text-strong);
+  font-weight: 700;
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+/* ── LAYOUT ── */
+main { max-width: 1000px; margin: 0 auto; padding: 56px 40px 100px; }
+
+/* ── SECTION WRAPPER ── */
+.section-wrap {
+  position: relative;
+  margin-top: 76px;
+}
+
+/* Ghost oversized italic number — the editorial mark */
+.section-num {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 140px;
+  color: var(--primary);
+  opacity: 0.038;
+  position: absolute;
+  top: -58px;
+  left: -10px;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -0.05em;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-solid);
+  margin-bottom: 26px;
+  position: relative; z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* ── STATUS STRIP ── */
+.status-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: var(--primary-faint);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 16px;
+}
+.status-text {
+  font-size: 13.5px;
+  color: var(--text);
+  flex: 1;
+  min-width: 200px;
+  line-height: 1.6;
+}
+.status-text strong { color: var(--primary-bright); }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  padding: 5px 13px;
+  border-radius: 99px;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pill-green  { background: var(--green-dim);   color: var(--green);          border: 1px solid var(--green-border);  animation: pillPop 0.4s ease 0.7s both; }
+.pill-green + .pill-green { animation-delay: 0.8s; }
+.pill-warn   { background: var(--warn-dim);    color: var(--warn);           border: 1px solid var(--warn-border);   animation: pillPop 0.4s ease 0.9s both; }
+.pill-amber  { background: var(--amber-dim);   color: var(--amber);          border: 1px solid var(--amber-border);  animation: pillPop 0.4s ease 1.0s both; }
+.pill-blue   { background: var(--primary-dim); color: var(--primary-bright); border: 1px solid var(--border); }
+
+/* ── BOOKING CARD ── */
+.booking-card {
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  border-left: 3px solid var(--green);
+  border-radius: 10px;
+  padding: 20px 26px;
+  margin-top: 16px;
+}
+.booking-card .booking-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 16px;
+}
+.booking-card .booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 16px;
+}
+.booking-card .blabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+  display: block;
+  margin-bottom: 4px;
+  opacity: 0.65;
+}
+.booking-card strong { font-size: 13.5px; color: var(--text-strong); font-weight: 500; }
+.booking-card code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--primary-bright);
+  font-weight: 700;
+  background: var(--primary-faint);
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* ── DEFERRED / PHASE NOTES ── */
+.deferred-note {
+  background: var(--amber-dim);
+  border: 1px solid var(--amber-border);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.65;
+  margin-top: 16px;
+}
+.deferred-note code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--amber);
+  font-weight: 700;
+  background: rgba(245,160,32,0.1);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.phase-note {
+  background: var(--surface);
+  border: 1px solid var(--border-solid);
+  border-left: 3px solid #1e3548;
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 16px;
+}
+.phase-note strong { color: var(--text); }
+.phase-note code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.tp-label {
+  background: var(--primary-dim);
+  color: var(--primary-bright);
+  border: 1px solid rgba(0,170,221,0.22);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* ── TABLES ── */
+.table-wrap {
+  border: 1px solid var(--border-solid);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 22px;
+  box-shadow: 0 4px 28px rgba(0,0,0,0.55);
+}
+
+.table-title {
+  background: var(--primary);
+  padding: 11px 22px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 13px; background: var(--surface); }
+
+thead tr { background: var(--surface-2); border-bottom: 1px solid var(--border-solid); }
+thead th {
+  padding: 10px 22px;
+  text-align: left;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+tbody tr { border-bottom: 1px solid var(--border-solid); transition: background 0.12s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(even) { background: rgba(0,0,0,0.16); }
+tbody tr:hover { background: var(--surface-3); }
+
+tbody td { padding: 10px 22px; vertical-align: top; }
+
+.ep {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary-bright);
+  background: var(--primary-faint);
+  padding: 3px 10px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  display: inline-block;
+  transition: border-color 0.18s, background 0.18s;
+}
+tr:hover .ep { border-color: rgba(0,170,221,0.3); background: rgba(0,119,187,0.1); }
+
+.use-case { color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+.use-case code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--text);
+  background: var(--surface-2);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+/* ── GAP CARD ── */
+.gap-card {
+  background: var(--warn-dim);
+  border: 1px solid var(--warn-border);
+  border-left: 4px solid var(--warn);
+  border-radius: 10px;
+  padding: 22px 26px;
+  box-shadow: 0 0 36px var(--warn-glow), 0 4px 16px rgba(0,0,0,0.45);
+}
+
+.gap-card .gap-title {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--warn);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  line-height: 1.25;
+}
+.gap-card .gap-title .gt-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.gap-card .gap-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--warn);
+  opacity: 0.6;
+  margin-bottom: 5px;
+}
+
+.gap-card p {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+.gap-card p code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #ff9060;
+  background: rgba(255,96,48,0.1);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.gap-card .action {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--warn);
+  background: rgba(255,94,42,0.07);
+  border: 1px solid rgba(255,94,42,0.18);
+  border-radius: 6px;
+  padding: 10px 14px;
+  line-height: 1.65;
+}
+.gap-card .action code { font-family: 'JetBrains Mono', monospace; color: #ff9060; }
+
+/* ── Q&A ── */
+.qa-list { display: flex; flex-direction: column; gap: 12px; }
+
+.qa-card {
+  border: 1px solid var(--border-solid);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--surface);
+  transition: box-shadow 0.2s;
+}
+.qa-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.35); }
+
+/* Inbound: question in serif — editorial gravitas */
+.inbound .qa-q {
+  font-family: 'DM Serif Display', serif;
+  font-size: 15.5px;
+  line-height: 1.4;
+}
+
+/* Outbound: question in DM Sans — direct, functional */
+.outbound .qa-card { border-left: 3px solid var(--primary); }
+.outbound .qa-card:hover { box-shadow: -2px 0 0 var(--primary-glow), 0 6px 24px rgba(0,0,0,0.35); }
+.outbound .qa-num { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.qa-q {
+  background: var(--surface-2);
+  padding: 14px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-strong);
+  border-bottom: 1px solid var(--border-solid);
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  line-height: 1.48;
+}
+
+.qa-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-dim);
+  border: 1px solid rgba(0,119,187,0.22);
+  border-radius: 4px;
+  padding: 2px 8px;
+  flex-shrink: 0;
+  margin-top: 3px;
+  letter-spacing: 0.05em;
+}
+
+.qa-a {
+  padding: 14px 20px 15px 56px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.78;
+}
+.qa-a strong { color: var(--text); font-weight: 600; }
+.qa-a code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--primary-bright);
+  background: var(--primary-faint);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+/* ── NEXT STEPS ── */
+.next-steps {
+  background: var(--primary-faint);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 30px 34px;
+}
+.next-steps h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--primary-bright);
+  margin-bottom: 22px;
+}
+.next-steps ol {
+  list-style: none;
+  counter-reset: steps;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.next-steps ol li {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+.next-steps ol li::before {
+  content: counter(steps, decimal-leading-zero);
+  counter-increment: steps;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--primary-bright);
+  background: var(--primary-dim);
+  border: 1px solid rgba(0,119,187,0.2);
+  border-radius: 4px;
+  padding: 3px 8px;
+  flex-shrink: 0;
+  margin-top: 2px;
+  letter-spacing: 0.04em;
+}
+.next-steps li div { flex: 1; }
+.next-steps li strong {
+  color: var(--primary-bright);
+  font-weight: 600;
+  font-size: 14px;
+  display: block;
+  margin-bottom: 3px;
+}
+.next-steps li span { color: var(--muted); font-size: 12.5px; line-height: 1.65; display: block; }
+.next-steps li code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--primary-bright);
+  background: var(--primary-faint);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--border);
+}
+
+/* ── SUBMITTED FIELDS ── */
+.field-block {
+  background: var(--surface);
+  border: 1px solid var(--border-solid);
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+}
+.field-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.field-value { font-size: 13.5px; color: var(--text); line-height: 1.65; }
+.field-value .mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--primary-bright);
+  font-weight: 700;
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 22px 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+  border-top: 1px solid var(--border-solid);
+  letter-spacing: 0.06em;
+  margin-top: 64px;
+  background: var(--surface);
+  opacity: 0.5;
+}
+
+/* ── PRINT ── */
+@media print {
+  body::before { display: none; }
+  * { animation: none !important; opacity: 1 !important; }
+  body { background: white; color: #0f1923; font-size: 11px; }
+  :root {
+    --bg: white; --surface: #f4f7fa; --surface-2: #e8eef5; --surface-3: #dce6ef;
+    --text: #1a2e40; --text-strong: #0f1923; --muted: #4a6070;
+    --border: #c0d0de; --border-solid: #c0d0de;
+    --primary: #0077BB; --primary-bright: #0077BB;
+    --primary-dim: rgba(0,119,187,0.1); --primary-faint: rgba(0,119,187,0.05);
+    --primary-glow: transparent;
+    --warn: #C2410C; --warn-dim: #fef3ee; --warn-border: #f5c5ae; --warn-glow: transparent;
+    --green: #166534; --green-dim: #f0fdf4; --green-border: #bbf7d0;
+    --amber: #92400e; --amber-dim: #fffbeb; --amber-border: #fde68a;
+  }
+  header {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    background: #0c1420 !important; padding: 24px 36px 20px;
+  }
+  header::before, header::after { display: none; }
+  .header-icon { filter: none !important; }
+  .table-title, .pill, .outbound .qa-card, .gap-card, .booking-card, .next-steps, thead tr {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+  main { padding: 16px 28px 32px; }
+  .section-wrap { margin-top: 28px; }
+  .section-num { display: none; }
+  .qa-card { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+  footer { padding: 10px 28px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-layout">
+    <div class="header-left">
+      <div class="brand-tag">Airnest Ops Connector &mdash; INT003752</div>
+      <div class="brand-wordmark">
+        <div class="brand-name">AIRNEST</div>
+        <div class="brand-connector">OPS CONNECTOR</div>
+      </div>
+      <div class="doc-title">Mews Certification Submission</div>
+      <p class="doc-sub">Internal Status Report &middot; Form submitted 2026-05-08 &middot; Awaiting review call with Milan</p>
+    </div>
+    <svg class="header-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="80" height="80" aria-hidden="true">
+      <rect x="3"  y="3"  width="30" height="30" rx="5" fill="#0077BB" opacity="1"/>
+      <rect x="39" y="3"  width="30" height="30" rx="5" fill="#0077BB" opacity="0.26"/>
+      <rect x="3"  y="39" width="30" height="30" rx="5" fill="#0077BB" opacity="0.26"/>
+      <rect x="39" y="39" width="30" height="30" rx="5" fill="#0077BB" opacity="1"/>
+      <line x1="18" y1="33" x2="18" y2="39" stroke="#00AADD" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="54" y1="33" x2="54" y2="39" stroke="#00AADD" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="33" y1="18" x2="39" y2="18" stroke="#00AADD" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="33" y1="54" x2="39" y2="54" stroke="#00AADD" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <hr class="header-rule">
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>2026-05-08</strong>Date</div>
+    <div class="header-meta-item"><strong>INT003752</strong>Partner ID</div>
+    <div class="header-meta-item"><strong>Luis Navarro</strong>Technical Contact</div>
+    <div class="header-meta-item"><strong>Milan Bezdecka</strong>Mews TPSM</div>
+    <div class="header-meta-item"><strong>Private Integration</strong>Type</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- STATUS -->
+  <div class="section-wrap">
+    <div class="section-num">0</div>
+    <div class="section-label">Status</div>
+
+    <div class="status-strip">
+      <div class="status-text">
+        <strong>Certification form submitted. Review call confirmed.</strong> 13 Connector API endpoints, 5 webhooks, and 3 WebSocket events declared. Review call booked for Monday 11 May at 12:00 with Milan Bezdecka. One endpoint gap flagged. Webhook URL to be provided before the call.
+      </div>
+      <span class="pill pill-green">✓ Form submitted</span>
+      <span class="pill pill-green">✓ Review call — Mon 11 May 12:00</span>
+      <span class="pill pill-warn">⚠ 1 gap flagged</span>
+      <span class="pill pill-amber">⏳ Webhook URL pending</span>
+    </div>
+
+    <div class="booking-card">
+      <div class="booking-title">✓ Review Call Confirmed — Calendar invite received from Mews Technical Partnerships</div>
+      <div class="booking-grid">
+        <div><span class="blabel">When</span><strong>Monday 11 May 2026, 12:00–12:30</strong></div>
+        <div><span class="blabel">With</span><strong>Milan Bezdecka</strong></div>
+        <div><span class="blabel">Pilot property</span><strong>Hotel Masanet</strong></div>
+        <div><span class="blabel">Client parameter</span><code>AirnestOpsConnector 1.0</code></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- WHAT WAS SUBMITTED -->
+  <div class="section-wrap">
+    <div class="section-num">1</div>
+    <div class="section-label">What Was Submitted</div>
+
+    <div class="table-wrap">
+      <div class="table-title">Connector API Endpoints &mdash; 13 submitted to form &middot; 12 active</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:240px;">Endpoint</th>
+            <th>Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="ep">configuration/get</span></td><td><span class="use-case">Property identity &amp; timezone (initialization — required before all other calls)</span></td></tr>
+          <tr><td><span class="ep">services/getAll</span></td><td><span class="use-case">Accommodation service ID discovery — prerequisite for most other Mews calls</span></td></tr>
+          <tr><td><span class="ep">services/getAvailability</span></td><td><span class="use-case">Real-time room availability per category — management dashboard</span></td></tr>
+          <tr><td><span class="ep">resources/getAll</span></td><td><span class="use-case">Room/unit inventory — total units per property (occupancy denominator)</span></td></tr>
+          <tr><td><span class="ep">resourceCategories/getAll</span></td><td><span class="use-case">Room type mapping — required to display category options</span></td></tr>
+          <tr><td><span class="ep">ageCategories/getAll</span></td><td><span class="use-case">Adult/child IDs for PersonCounts — required by reservations/add &nbsp;⚠ see gap note below</span></td></tr>
+          <tr><td><span class="ep">rates/getAll</span></td><td><span class="use-case">Rate plan visibility &amp; parity monitoring across properties</span></td></tr>
+          <tr><td><span class="ep">reservations/getAll</span></td><td><span class="use-case">Management dashboard: occupancy, ADR, RevPAR, channel mix, arrivals &amp; departures</span></td></tr>
+          <tr><td><span class="ep">customers/getAll</span></td><td><span class="use-case">Guest lookup by email/ID — return-guest detection, guest profile sync</span></td></tr>
+          <tr><td><span class="ep">customers/add</span></td><td><span class="use-case">Guest profile creation (conditional: only if email not already in Mews)</span></td></tr>
+          <tr><td><span class="ep">bills/getAll</span></td><td><span class="use-case">Revenue &amp; invoice data — financial reporting pipeline</span></td></tr>
+          <tr><td><span class="ep">payments/getAll</span></td><td><span class="use-case">Payment settlement tracking &amp; bank reconciliation</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="deferred-note">
+      <strong>Note on <code>reservations/add</code>:</strong> This endpoint was selected on the certification form to secure it for future use, but <strong>will not be exercised initially</strong>. Airnest is currently using the Mews native booking engine for reservation creation. When Airnest's proprietary direct booking channel launches, <code>reservations/add</code> will be activated without requiring a new certification submission. Milan's team will be informed of this at the Monday review call.
+    </div>
+
+    <div class="table-wrap" style="margin-top:22px;">
+      <div class="table-title">General Webhook Events &mdash; 5 selected</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:240px;">Event</th>
+            <th>Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="ep">ServiceOrderUpdated</span></td><td><span class="use-case">Real-time reservation sync — keeps dashboard current on create / modify / cancel / check-in / check-out</span></td></tr>
+          <tr><td><span class="ep">PaymentUpdated</span></td><td><span class="use-case">Triggers payment reconciliation pipeline on settlement or refund</span></td></tr>
+          <tr><td><span class="ep">CustomerAdded</span></td><td><span class="use-case">Real-time guest profile sync — populates guests table reactively (no unfiltered bulk fetch available)</span></td></tr>
+          <tr><td><span class="ep">CustomerUpdated</span></td><td><span class="use-case">Guest profile changes &amp; marketing consent tracking</span></td></tr>
+          <tr><td><span class="ep">ResourceUpdated</span></td><td><span class="use-case">Room state changes — housekeeping &amp; occupancy signals for dashboard</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-title">WebSocket Events &mdash; 3 subscribed</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:240px;">Event</th>
+            <th>Use Case</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="ep">Reservation</span></td><td><span class="use-case">Lower-latency complement to <code>ServiceOrderUpdated</code> webhook — near-real-time dashboard refresh</span></td></tr>
+          <tr><td><span class="ep">Resource</span></td><td><span class="use-case">Lower-latency complement to <code>ResourceUpdated</code> webhook — immediate room state for housekeeping view</span></td></tr>
+          <tr><td><span class="ep">Price update</span></td><td><span class="use-case">Atomize is already in production pushing real-time pricing into Mews — dashboard must reflect live rates without polling delay</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label">Integration Description (submitted to Mews)</div>
+      <div class="field-value">Airnest Ops Connector is an internal integration built by Airnest Homes SL that pulls reservation, guest, availability, and financial data from Mews into a centralized management dashboard and reporting pipeline. It uses Mews webhooks and WebSocket events for real-time updates, with integration scope expanding as Airnest's operational platform evolves.</div>
+    </div>
+
+    <div class="field-block">
+      <div class="field-label">Tooltip (one-line description)</div>
+      <div class="field-value">Centralized Mews data pipeline for Airnest's internal operations dashboard and reporting.</div>
+    </div>
+
+    <div class="field-block" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;">
+      <div>
+        <div class="field-label">Technical Contact</div>
+        <div class="field-value">Luis Navarro</div>
+      </div>
+      <div style="border-left:1px solid var(--border-solid);padding-left:22px;">
+        <div class="field-label">Multi-Property</div>
+        <div class="field-value"><span class="mono">YES</span> — enables Portfolio Access Token if approved</div>
+      </div>
+      <div style="border-left:1px solid var(--border-solid);padding-left:22px;">
+        <div class="field-label">Webhook URL</div>
+        <div class="field-value" style="color:var(--amber);">⏳ Pending — VPS not yet provisioned</div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FLAGGED GAPS -->
+  <div class="section-wrap">
+    <div class="section-num">2</div>
+    <div class="section-label">⚠ Flagged Gap — Endpoint Not Found in Form</div>
+
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.65;">
+      One endpoint in our verified scope did not appear in any form category during submission. Raise with Milan at the review call.
+    </p>
+
+    <div class="gap-card" style="max-width:720px;">
+      <div class="gap-title">⚠&nbsp;<span class="gt-code">ageCategories/getAll</span></div>
+      <div class="gap-label">Status</div>
+      <p>In our 13 tested and verified endpoints. Did not surface in any form category during submission — not selected, not declined.</p>
+      <div class="gap-label">Why it matters</div>
+      <p>This is a required dependency for <code>reservations/add</code>. The Mews API requires adult/child Age Category IDs in the <code>PersonCounts</code> field of every reservation. Without this endpoint we cannot create valid reservations when the direct booking channel launches.</p>
+      <div class="action">→ Ask Milan: is this auto-included with <code>services/getAll</code>, or does it need to be explicitly requested? Does it live in a category not shown to us during form submission?</div>
+    </div>
+
+    <div class="phase-note" style="max-width:720px;">
+      <strong>accountingItems/getAll — not included, not a blocker.</strong> This endpoint is deferred to <strong>Ops Brain Phase 6</strong> (Finance + Reconciliation + Tax) for IGIC / Modelo 179 revenue line reporting. It did not appear in any Mews form category during submission — likely covered by <code>orderitems/getAll</code> or a related endpoint. A scope amendment will be submitted when Phase 6 is ready.
+    </div>
+  </div>
+
+
+  <!-- QUESTIONS TO ASK MEWS -->
+  <div class="section-wrap">
+    <div class="section-num">3</div>
+    <div class="section-label">Questions to Ask the Mews Team</div>
+
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Raise these at the review call with Milan or by email beforehand.</p>
+
+    <div class="qa-list outbound">
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q1</span>Portfolio Access Token — does selecting "multi-property level" on the form actually result in a single Portfolio Access Token, or do properties still generate individual tokens via the Marketplace?</div>
+        <div class="qa-a">This affects our entire token architecture. Knowing the answer now lets us design the connector correctly before production.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q2</span>Form gaps — where do <code>ageCategories/getAll</code> and <code>accountingItems/getAll</code> appear in the certification form? Are some endpoints auto-included when parent calls are approved?</div>
+        <div class="qa-a"><code>ageCategories/getAll</code> is a required dependency for <code>reservations/add</code>. We need confirmation our approval covers it.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="tp-label">NOTE</span>&nbsp;&nbsp;Webhook URL — confirm live endpoint at the start of the call. This should be resolved before Monday.</div>
+        <div class="qa-a">The webhook endpoint will be provisioned and live before Monday's call. Bring the URL (<code>https://webhooks.airnest.es/mews</code> or equivalent) to provide to Milan at the start of the call. No question needed — this is a handover item, not an outstanding issue.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q4</span>Scope amendment process — what's the procedure for adding endpoints after initial certification? We have Phase 6 (accounting, tax) endpoints we'll need when Ops Brain Phase 6 ships.</div>
+        <div class="qa-a">Needed so we can plan the AOS build timeline knowing how long amendments take.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q5</span>Production token timeline — once the review call is approved, how long until the production ClientToken is issued?</div>
+        <div class="qa-a">We've told Javier to expect 4–6 weeks total. Knowing the post-call timeline lets us set a more accurate expectation.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q6</span>Marketplace connection flow — confirm the steps each property (Bandama, Veintiuno, Masanet, Emete) needs to take to generate their AccessToken via the Mews Marketplace once our ClientToken is issued.</div>
+        <div class="qa-a">We want to have a ready checklist for Javier to send to each property manager on approval day.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q7</span>Rate limit on Portfolio token — is the 200 req / 30 sec limit per token or per property when using a Portfolio Access Token?</div>
+        <div class="qa-a">
+          <strong>What this means in plain terms:</strong> Mews allows 200 API calls every 30 seconds per access token — think of it as a flow limiter on a tap. With a standard per-property setup, each property gets its own token and its own 200-call budget. With a Portfolio token (one token covering all properties), the question is: does that 200-call budget apply to the whole portfolio combined, or does each property still get its own 200-call window through the single token?<br><br>
+          <strong>Why it matters for Airnest:</strong> We currently have 4 properties (Bandama, Veintiuno, Masanet, Emete). Our nightly sync pulls reservation, billing, and payment data for each. If the limit is shared across the portfolio, a burst of 4 properties × ~15 calls each = 60 calls, well within budget. But as the portfolio grows toward 15–20 properties, a shared 200-call limit could become a bottleneck if all properties sync at the same time. Knowing this now lets us design the sync scheduler correctly — either staggering properties to spread load, or batching calls more aggressively.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q8</span>Webhook retry behaviour — what is Mews' retry policy if our webhook endpoint is briefly unavailable? Is there a dead-letter queue or manual replay option?</div>
+        <div class="qa-a">
+          <strong>What webhooks are:</strong> When something changes in Mews — a reservation is created, a payment arrives — Mews instantly sends an automatic HTTP notification (a "webhook") to our server URL. Our server needs to be online and respond within a few seconds to acknowledge receipt.<br><br>
+          <strong>The risk:</strong> If our server is briefly down — restarting after a software update, recovering from a blip — Mews will try to send the notification to a URL that isn't responding. The question is: does Mews try again automatically (and for how long)? Or is that notification permanently lost?<br><br>
+          <strong>Why the answer changes what we build:</strong> If Mews retries for several hours, we can tolerate brief outages — our nightly 03:00 sync also catches up on any missed data. But if Mews drops notifications after one failed attempt, we need a more robust server setup (potentially a message queue like Redis that buffers incoming notifications even if our main process is momentarily busy). The answer tells us exactly how much resilience we need to build into the infrastructure from day one.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q9</span>Demo environment post-certification — can we continue using the demo environment in parallel with production for QA and future endpoint testing?</div>
+        <div class="qa-a">We want to test Phase 6 endpoints in demo before submitting the scope amendment.</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ANTICIPATED MEWS QUESTIONS -->
+  <div class="section-wrap">
+    <div class="section-num">4</div>
+    <div class="section-label">Anticipated Mews Questions — Recommended Answers</div>
+
+    <p style="font-size:13px;color:var(--muted);margin-bottom:20px;">Prepare these answers before the review call.</p>
+
+    <div class="qa-list inbound">
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q1</span>Is this a single-customer or multi-customer integration?</div>
+        <div class="qa-a"><strong>Single-customer private integration.</strong> Airnest Ops Connector is internal-only. Airnest Homes SL is both the developer and the sole user. Not intended for distribution or resale.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q2</span>Why include <code>reservations/add</code> if you're using the Mews booking engine?</div>
+        <div class="qa-a"><strong>Declared now to avoid a second certification — but not active initially. We will inform Milan of this proactively at the call.</strong> Airnest is currently using the Mews native booking engine, so <code>reservations/add</code> will not be called in production at this stage. We selected it on the certification form to secure it for a future proprietary direct booking channel currently in development. Holding the approved permission means we can activate it when the channel launches without needing to go back through the full certification process again. We are flagging this upfront with Milan so there is no ambiguity about current versus planned usage.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q3</span>Why no <code>customers/update</code> or <code>reservations/update</code>?</div>
+        <div class="qa-a"><strong>Mews is system of record.</strong> Guest profile updates and reservation modifications are handled directly in Mews by property staff. Our integration is read-heavy with one write path (direct booking creation only). We do not modify existing records.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q4</span>What is your expected API call frequency?</div>
+        <div class="qa-a"><strong>Nightly bulk sync at 03:00</strong> per property — pulls <code>reservations/getAll</code>, <code>bills/getAll</code>, <code>payments/getAll</code>, <code>customers/getAll</code> with date filters. Intra-day updates via webhooks (no polling). Live calls only for current-day data and the direct booking creation flow. Respects 90-day chunking for reservation intervals.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q5</span>How do you handle guest PII?</div>
+        <div class="qa-a">
+          <strong>Encrypted, access-controlled, time-limited, and never shared.</strong><br><br>
+          <strong>What PII means:</strong> PII stands for Personally Identifiable Information — guest name, email address, phone number, nationality, passport or ID number. Essentially any data that can identify a specific person. As a Spanish company operating under European law, Airnest is subject to GDPR, which requires this data to be stored securely, used only for stated purposes, and not kept longer than necessary.<br><br>
+          <strong>How we handle it in practice:</strong><br>
+          • <strong>Encrypted storage</strong> — guest data in the Ops Brain database is encrypted at rest. This means even if someone physically accessed the server, they could not read the guest data without the encryption key.<br>
+          • <strong>Credential isolation</strong> — API tokens and passwords live in <code>.env</code> configuration files that are never uploaded to GitHub. They exist only on the server and on authorised developer machines.<br>
+          • <strong>24-month auto-delete</strong> — guest records are automatically removed 24 months after the guest checks out. This matches the standard Spanish hospitality compliance window (Modelo 179 reporting obligations).<br>
+          • <strong>No third-party sharing</strong> — guest data is not passed to any external service beyond the systems that originally provided it (Mews). We do not send guest names, emails, or IDs to marketing platforms or analytics tools.<br>
+          • <strong>Least privilege per credential</strong> — each API token is scoped to only what it needs. The Mews connector can read reservations and create guest profiles, but it cannot delete records, charge credit cards, or access other integrations' data.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q6</span>Why both <code>ResourceUpdated</code> webhook and <code>Resource</code> WebSocket event?</div>
+        <div class="qa-a"><strong>Different delivery guarantees.</strong> Webhooks (2–5 min latency) for guaranteed delivery and audit trail. WebSocket for lower-latency dashboard refresh on housekeeping signals where near-real-time matters. They serve complementary purposes, not duplicate ones.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q7</span>Why subscribe to <code>Price update</code> WebSocket events if you're not pushing rates?</div>
+        <div class="qa-a"><strong>Atomize is already in production</strong> at Airnest, pushing optimized pricing into Mews in real-time. The management dashboard needs to reflect live rates without TTL polling delay. This is a read subscription — we receive price events, we do not push rate changes.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q8</span>Are you certified to handle credit card data?</div>
+        <div class="qa-a"><strong>No card data handled.</strong> <code>payments/getAll</code> reads payment event metadata only — amounts, status, timestamps. Mews owns all card processing and tokenization. We do not touch, store, or transmit card numbers or CVVs.</div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q9</span>Have you tested all endpoints in the demo environment?</div>
+        <div class="qa-a">
+          <strong>Yes — all 13 confirmed working against Hotel Bandama Golf (BGH) demo property, tested 2026-05-07.</strong><br><br>
+          Full results endpoint by endpoint:<br>
+          • <strong>configuration/get</strong> ✓ — Returned property name, enterprise ID, and timezone correctly.<br>
+          • <strong>services/getAll</strong> ✓ — Returned the accommodation service ID that all subsequent calls depend on.<br>
+          • <strong>resources/getAll</strong> ✓ — Returned 18 rooms with their current occupancy states and category assignments.<br>
+          • <strong>resourceCategories/getAll</strong> ✓ — Returned 5 room types. <em>Known quirk: the <code>ServiceIds</code> filter must be included in the request body or the call fails silently.</em><br>
+          • <strong>ageCategories/getAll</strong> ✓ — Returned adult and child age category IDs needed to specify guest counts on reservations.<br>
+          • <strong>rates/getAll</strong> ✓ — Returned 1 active rate plan ("Fully Flexible").<br>
+          • <strong>reservations/getAll</strong> ✓ — Returned 53 reservations (51 Confirmed, 2 Started). <em>Known limit: Mews rejects queries spanning more than 100 days — we use 90-day chunks to stay safe.</em><br>
+          • <strong>reservations/add</strong> ✓ — Test reservation created and confirmed in Mews. <em>Known quirk: the reservation ID in the response is nested at <code>Reservations[0].Reservation.Id</code>, not at the top level.</em><br>
+          • <strong>services/getAvailability</strong> ✓ — Returned 5 room category availability slots across a 32-day window.<br>
+          • <strong>customers/getAll</strong> ✓ — Guest lookup by email and by creation date confirmed working. <em>Known behaviour: at least one filter is required — an unfiltered fetch returns an error, not an empty list.</em><br>
+          • <strong>customers/add</strong> ✓ — New guest profile created and retrieved successfully. <em>Known behaviour: returns HTTP 400 if the email already exists in Mews — the booking flow must always check for an existing profile first.</em><br>
+          • <strong>bills/getAll</strong> ✓ — HTTP 200, 0 bills returned. Expected in demo — the test property has no closed billing.<br>
+          • <strong>payments/getAll</strong> ✓ — HTTP 200, 0 payments returned. Expected in demo — same reason.<br><br>
+          All quirks and edge cases are documented in <code>Resources/mews-api-notes.md</code>. Test scripts are in <code>01_API_Connector/</code>.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q10</span>Are you respecting Mews' rate limits?</div>
+        <div class="qa-a">
+          <strong>Yes — the connector is designed from the ground up to stay well within the 200 req / 30 sec limit.</strong><br><br>
+          <strong>What rate limits mean:</strong> Mews allows up to 200 API calls within any 30-second window. Exceed this and Mews temporarily blocks further calls until the window resets — similar to a data tap with a built-in flow limiter. Staying within limits is essential: a connector that trips the rate limit will start failing calls and missing data mid-sync.<br><br>
+          <strong>How we stay within limits:</strong><br>
+          • <strong>90-day reservation chunks</strong> — Mews rejects any reservation query spanning more than 100 days. A full-year data pull = 5 chunked calls (each covering 90 days), not one oversized request that would be rejected.<br>
+          • <strong>Cursor-based pagination</strong> — when Mews has more data than fits in one response, we follow Mews' standard pagination pattern, requesting each page in sequence.<br>
+          • <strong>TTL caching</strong> — room inventory and rate plans are cached for 1 hour. Reservations and availability are cached for 5 minutes. The vast majority of dashboard requests are served from cache, not from live API calls.<br>
+          • <strong>Staggered nightly sync</strong> — bulk data pulls run at 03:00 when Mews activity is low. Properties sync sequentially, not in parallel.<br>
+          • <strong>Webhook-driven intra-day</strong> — between nightly syncs, real-time updates come via Mews push notifications (webhooks), not by the connector polling the API repeatedly. Zero unnecessary API calls during business hours.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q11</span>What language and runtime are you using?</div>
+        <div class="qa-a">
+          <strong>Python on a private Hetzner cloud server — industry-standard, GDPR-compliant, low-cost.</strong><br><br>
+          • <strong>Python</strong> — widely used for API integrations and automation. Airnest already uses it for financial scripts and the Guesty→Mews migration pipeline.<br>
+          • <strong>httpx (async)</strong> — the library that makes the actual HTTP calls to the Mews API. Async means the connector doesn't freeze while waiting for Mews to respond — it can handle multiple operations efficiently.<br>
+          • <strong>FastAPI</strong> — a lightweight Python web framework that receives the webhook POST messages from Mews. Fast, well-documented, industry-standard choice for small API receivers.<br>
+          • <strong>Hetzner VPS (CX22, ~€4/month)</strong> — a German cloud server provider. GDPR-compliant with EU data centres. Significantly cheaper than AWS or Google Cloud and well-suited to low-traffic internal services.<br>
+          • <strong>SQLite</strong> — a simple, file-based database. No separate database server to manage. Very low maintenance and appropriate for Airnest's data volume.<br>
+          • <strong><code>.env</code> credential files</strong> — API tokens and passwords are stored in configuration files explicitly excluded from version control (gitignored). They exist only on the server and authorised developer machines.<br>
+          • <strong>Direct Mews token handling</strong> — no third-party library sits between our code and the Mews API. We inject <code>ClientToken</code> and <code>AccessToken</code> directly into each request body ourselves, exactly as Mews' documentation specifies.
+        </div>
+      </div>
+
+      <div class="qa-card">
+        <div class="qa-q"><span class="qa-num">Q12</span>What happens if the webhook endpoint goes down?</div>
+        <div class="qa-a"><strong>Nightly sync provides the safety net.</strong> Even if webhooks are missed, the 03:00 bulk sync will catch up on any deltas from the previous day. VPS uptime will be monitored. We'll ask Milan about Mews' retry policy to assess whether a message queue buffer is needed.</div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- NEXT STEPS -->
+  <div class="section-wrap">
+    <div class="section-num">5</div>
+    <div class="section-label">Next Steps — Blockers Before Review Call</div>
+
+    <div class="next-steps">
+      <h3>Action Plan</h3>
+      <ol>
+        <li>
+          <div>
+            <strong>Provision webhook endpoint.</strong>
+            <span>Spin up Hetzner CX22 VPS (~€4/mo). Point <code>webhooks.airnest.es</code> subdomain at it. Deploy minimal FastAPI receiver with HTTPS via Let's Encrypt. Target URL: <code>https://webhooks.airnest.es/mews</code>. Required before review call with Milan.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Email Milan before Monday — flag the gap and the reservations/add note.</strong>
+            <span>Confirm form submission. Flag <code>ageCategories/getAll</code> as missing from the form categories — ask whether it's auto-included or needs explicit approval. Also note that <code>reservations/add</code> was selected on the form but won't be exercised initially (Mews booking engine in use for now).</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Prepare for the review call.</strong>
+            <span>Use the Q&amp;A sections above as a brief. Have demo test results (mews-integration-report-2026-05-07) and this document on hand.</span>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Post-approval: Marketplace connection per property.</strong>
+            <span>Once the production ClientToken is issued, each property (Bandama, Veintiuno, Masanet, Emete) must generate their own AccessToken via the Mews Marketplace connection request. Confirm the exact steps with Milan.</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Airnest Homes SL &mdash; Internal only &mdash; Not for distribution &mdash; Generated 2026-05-08<br>
+  Source: Mews_API_Connector/Resources/mews-certification-form-reference.md &middot; Partner ID INT003752
+</footer>
+
+</body>
+</html>

@@ -1593,29 +1593,82 @@
     var checkedLabels = [];
     document.querySelectorAll('[data-check-id]').forEach(function (el) {
       if (el.checked) {
-        var label = el.closest('li,div') && el.closest('li,div').querySelector('.check-label,.ask-q');
-        checkedLabels.push('✓ ' + (label ? label.textContent.trim().split('\n')[0] : el.dataset.checkId));
+        var labelEl = el.closest('li,div') && el.closest('li,div').querySelector('.check-label,.ask-q');
+        checkedLabels.push('  ✓ ' + (labelEl ? labelEl.textContent.trim().split('\n')[0] : el.dataset.checkId));
       }
     });
     if (checkedLabels.length) {
-      sections.push('CHECKED ITEMS\n' + checkedLabels.join('\n'));
+      sections.push('PRE-CALL CHECKLIST (completed items)\n' + checkedLabels.join('\n'));
     }
 
-    // All note fields
+    // All note fields with context-aware headers
     document.querySelectorAll('[data-note-id]').forEach(function (el) {
-      var label = el.dataset.noteLabel || el.dataset.noteId;
       var val;
       if (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') {
         val = el.value.trim();
       } else {
         val = (el.innerText || '').trim();
       }
-      if (val) {
-        sections.push('[' + label + ']\n' + val);
+      if (!val) return;
+
+      var noteId = el.dataset.noteId;
+      var header = '';
+
+      if (noteId.indexOf('qa-') === 0) {
+        // Q&A note — lead with question badge + full question text
+        var card = el.closest('.qa-card');
+        if (card) {
+          var badge = card.querySelector('.qa-badge');
+          var question = card.querySelector('.qa-question');
+          header = (badge ? badge.textContent.trim() + ' — ' : '') +
+                   (question ? question.textContent.trim() : el.dataset.noteLabel || noteId);
+        } else {
+          header = el.dataset.noteLabel || noteId;
+        }
+
+      } else if (noteId.indexOf('ask-') === 0) {
+        // Ask-Mews answer — lead with the question asked to Milan
+        var item = el.closest('.ask-item');
+        if (item) {
+          var askQ = item.querySelector('.ask-q');
+          var askSub = item.querySelector('.ask-sub');
+          header = 'Ask Mews: ' + (askQ ? askQ.textContent.trim() : el.dataset.noteLabel || noteId);
+          if (askSub) header += '\n  (' + askSub.textContent.trim() + ')';
+        } else {
+          header = el.dataset.noteLabel || noteId;
+        }
+
+      } else if (noteId.indexOf('tracker-') === 0) {
+        // Live decision tracker — lead with the field label
+        var row = el.closest('.tracker-row');
+        var tKey = row && row.querySelector('.tracker-key');
+        header = 'Decision Tracker — ' + (tKey ? tKey.textContent.trim() : el.dataset.noteLabel || noteId);
+
+      } else if (noteId.indexOf('section-') === 0) {
+        // Section general notes — lead with section title
+        var wrap = el.closest('.section-wrap');
+        if (wrap) {
+          var eyebrow = wrap.querySelector('.section-eyebrow');
+          var title = wrap.querySelector('.section-title');
+          header = (eyebrow ? eyebrow.textContent.trim() + ' — ' : '') +
+                   (title ? title.textContent.trim() : el.dataset.noteLabel || noteId) +
+                   '\n[General notes]';
+        } else {
+          header = el.dataset.noteLabel || noteId;
+        }
+
+      } else if (noteId.indexOf('action-') === 0) {
+        // Post-call action table cell
+        header = 'Post-Call Actions — ' + (el.dataset.noteLabel || noteId);
+
+      } else {
+        header = el.dataset.noteLabel || noteId;
       }
+
+      sections.push(header + '\n' + val);
     });
 
-    if (!sections.length && !checkedLabels.length) { alert('No notes yet.'); return; }
+    if (!sections.length) { alert('No notes yet.'); return; }
 
     var body = [
       'MEWS REVIEW CALL NOTES — 11 May 2026',

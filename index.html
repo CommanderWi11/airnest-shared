@@ -3,34 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Airnest — Shared Documents</title>
+  <title>Shared-Airnest</title>
   <script src="gate.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Epilogue:ital,wght@0,300;0,400;0,500;0,600;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Schibsted+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:          #F8F6F2;
-      --surface:     #FFFFFF;
-      --border:      #E4E0D9;
-      --border-strong: #C8C3BA;
-      --text:        #1C1B18;
-      --text-2:      #5A5750;
-      --text-3:      #9E9A94;
-      --blue:        #1B4F7A;
-      --blue-light:  #EBF2F8;
-      --amber:       #8C5310;
-      --amber-light: #F5EDE0;
-      --green:       #1E6446;
-      --green-light: #E4F0EC;
+      --bg:     #F4F1EA;
+      --text:   #141210;
+      --text-2: #5C5852;
+      --text-3: #9A9590;
+      --accent: #B5331A;
+      --border: #D5D0C8;
+      --border-s: #B0A89E;
     }
 
-    html { font-size: 16px; }
-
     body {
-      font-family: 'Epilogue', system-ui, sans-serif;
+      font-family: 'Schibsted Grotesk', sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -39,260 +31,177 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── HEADER ── */
+    /* ── MASTHEAD ── */
     header {
-      padding: 0 48px;
-      border-bottom: 1px solid var(--border);
+      padding: 36px 48px 0;
+      animation: fadeUp 0.7s ease 0.05s both;
+    }
+
+    .mast-top-rule { height: 1.5px; background: var(--text); }
+
+    .mast-wordmark {
+      display: block;
+      font-family: 'Fraunces', serif;
+      font-size: clamp(68px, 11.5vw, 128px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 0.88;
+      color: var(--text);
+      padding: 14px 0;
+    }
+
+    .mast-strip {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 64px;
-      opacity: 0;
-      animation: fadeUp 0.6s ease 0.05s forwards;
+      padding: 11px 0 0;
+      border-top: 1.5px solid var(--text);
     }
 
-    .wordmark {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-    }
-
-    .wordmark-a {
-      width: 26px;
-      height: 26px;
-      background: var(--text);
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--bg);
-      flex-shrink: 0;
-      letter-spacing: -0.01em;
-    }
-
-    .wordmark-name {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 19px;
-      font-weight: 400;
-      letter-spacing: 0.04em;
-      color: var(--text);
-    }
-
-    .header-label {
+    .mast-strip span {
       font-family: 'JetBrains Mono', monospace;
       font-size: 9px;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--text-3);
     }
 
-    /* ── MASTHEAD ── */
-    .masthead {
-      padding: 56px 48px 40px;
+    .mast-meta { color: var(--text-3); }
+    .mast-status { color: var(--accent); }
+
+    /* ── MAIN ── */
+    main { flex: 1; padding: 0 48px 72px; }
+
+    .content-block {
+      display: grid;
+      grid-template-columns: 172px 1fr;
+      border-top: 1px solid var(--border);
+      margin-top: 44px;
       opacity: 0;
-      animation: fadeUp 0.6s ease 0.15s forwards;
+      animation: fadeUp 0.6s ease both;
+    }
+    .content-block:nth-child(1) { animation-delay: 0.28s; }
+    .content-block:nth-child(2) { animation-delay: 0.42s; }
+
+    .col-side {
+      padding: 26px 22px 0 0;
+      border-right: 1px solid var(--border);
     }
 
-    .masthead-eyebrow {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.25em;
+    .col-sname {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--text-3);
+      color: var(--text-2);
+      line-height: 1.65;
       margin-bottom: 14px;
     }
 
-    .masthead-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(32px, 4vw, 44px);
-      font-weight: 300;
-      line-height: 1.1;
-      color: var(--text);
-      letter-spacing: -0.01em;
-    }
-
-    .masthead-title em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--text-2);
-    }
-
-    /* ── MAIN ── */
-    main {
-      flex: 1;
-      padding: 0 48px 72px;
-      max-width: 840px;
-      width: 100%;
-    }
-
-    /* ── SECTION ── */
-    .doc-section {
-      margin-bottom: 52px;
-      opacity: 0;
-      animation: fadeUp 0.5s ease forwards;
-    }
-
-    .doc-section:nth-child(1) { animation-delay: 0.25s; }
-    .doc-section:nth-child(2) { animation-delay: 0.35s; }
-    .doc-section:nth-child(3) { animation-delay: 0.45s; }
-    .doc-section:nth-child(4) { animation-delay: 0.55s; }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 14px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 4px;
-    }
-
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .section-pip {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .section-name {
-      font-family: 'Epilogue', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-2);
-    }
-
-    .section-count {
+    .col-scode {
       font-family: 'JetBrains Mono', monospace;
       font-size: 9px;
-      color: var(--text-3);
+      color: var(--accent);
+      letter-spacing: 0.1em;
     }
 
-    /* ── DOC ROW ── */
-    .doc-list {
-      display: flex;
-      flex-direction: column;
-    }
+    .col-docs { padding-left: 40px; }
 
-    .doc-row {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      padding: 18px 0;
+    /* ── TOC ENTRY ── */
+    .toc-entry {
+      display: grid;
+      grid-template-columns: 50px 1fr 22px;
+      gap: 0 14px;
+      align-items: start;
+      padding: 22px 0;
       border-bottom: 1px solid var(--border);
       text-decoration: none;
       color: inherit;
-      position: relative;
-      transition: padding-left 0.22s ease;
+      transition: padding-left 0.2s ease;
+    }
+    .toc-entry:last-child { border-bottom: none; }
+    .toc-entry:hover { padding-left: 4px; }
+
+    .toc-num {
+      font-family: 'Fraunces', serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--border-s);
+      line-height: 1;
+      padding-top: 1px;
+      transition: color 0.2s, transform 0.22s ease;
+    }
+    .toc-entry:hover .toc-num {
+      color: var(--accent);
+      transform: translateX(5px);
     }
 
-    .doc-row:hover {
-      padding-left: 6px;
-    }
+    .toc-title-wrap { margin-bottom: 5px; }
 
-    .doc-row:hover .doc-title { color: var(--text); }
-    .doc-row:hover .doc-arrow { opacity: 1; transform: translateX(2px); }
-    .doc-row:last-child { border-bottom: none; }
-
-    .doc-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .toc-title {
       font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .doc-body {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .doc-title {
-      font-size: 14.5px;
       font-weight: 500;
       color: var(--text);
       line-height: 1.35;
-      margin-bottom: 5px;
-      transition: color 0.18s;
+      position: relative;
+    }
+    .toc-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .toc-entry:hover .toc-title::after { width: 100%; }
+
+    .toc-desc {
+      font-size: 12px;
+      font-weight: 400;
+      color: var(--text-3);
+      line-height: 1.55;
+      margin-bottom: 10px;
     }
 
-    .doc-meta {
+    .toc-meta {
       display: flex;
       align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .doc-tag {
+    .toc-tag {
       font-family: 'JetBrains Mono', monospace;
       font-size: 9px;
-      font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 3px;
+      color: var(--text-3);
     }
 
-    .doc-date {
+    .toc-date {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--text-3);
+      font-size: 9px;
+      color: var(--border-s);
     }
 
-    .doc-desc {
-      display: block;
-      font-size: 12.5px;
-      font-weight: 300;
-      color: var(--text-3);
-      margin-top: 3px;
-      line-height: 1.5;
+    .toc-arrow {
+      font-size: 14px;
+      color: var(--border);
+      padding-top: 3px;
+      transition: color 0.2s, transform 0.22s ease;
     }
-
-    .doc-arrow {
-      font-size: 15px;
-      color: var(--text-3);
-      flex-shrink: 0;
-      opacity: 0.4;
-      transition: opacity 0.18s, transform 0.22s ease;
+    .toc-entry:hover .toc-arrow {
+      color: var(--accent);
+      transform: translateX(3px);
     }
-
-    /* colour variants */
-    .icon-blue   { background: var(--blue-light);  }
-    .icon-amber  { background: var(--amber-light); }
-    .icon-green  { background: var(--green-light); }
-
-    .tag-blue    { background: var(--blue-light);  color: var(--blue);  }
-    .tag-amber   { background: var(--amber-light); color: var(--amber); }
-    .tag-green   { background: var(--green-light); color: var(--green); }
-
-    .pip-blue    { background: var(--blue);  }
-    .pip-amber   { background: var(--amber); }
-    .pip-green   { background: var(--green); }
 
     /* ── FOOTER ── */
     footer {
-      padding: 22px 48px;
-      border-top: 1px solid var(--border);
+      padding: 16px 48px;
+      border-top: 1.5px solid var(--text);
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      opacity: 0;
-      animation: fadeUp 0.5s ease 0.6s forwards;
+      animation: fadeUp 0.5s ease 0.58s both;
     }
-
-    .footer-copy {
+    footer span {
       font-family: 'JetBrains Mono', monospace;
       font-size: 9px;
       letter-spacing: 0.1em;
@@ -300,118 +209,104 @@
       color: var(--text-3);
     }
 
-    /* ── ANIMATIONS ── */
+    /* ── ANIMATION ── */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(10px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ── MOBILE ── */
-    @media (max-width: 600px) {
-      header    { padding: 0 24px; }
-      .header-label { display: none; }
-      .masthead { padding: 40px 24px 28px; }
-      main      { padding: 0 24px 56px; }
-      footer    { padding: 18px 24px; flex-direction: column; gap: 4px; text-align: center; }
-      .doc-desc { display: none; }
+    @media (max-width: 620px) {
+      header, main { padding-left: 24px; padding-right: 24px; }
+      footer { padding: 14px 24px; }
+      .content-block { grid-template-columns: 1fr; }
+      .col-side { border-right: none; border-bottom: 1px solid var(--border); padding: 18px 0 12px; }
+      .col-docs { padding-left: 0; padding-top: 4px; }
+      .toc-entry { grid-template-columns: 40px 1fr 20px; }
+      .toc-desc { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
-    <div class="wordmark">
-      <div class="wordmark-a">A</div>
-      <div class="wordmark-name">Airnest</div>
+    <div class="mast-top-rule"></div>
+    <span class="mast-wordmark">SHARED-AIRNEST</span>
+    <div class="mast-strip">
+      <span class="mast-meta">Vol.&nbsp;01 &nbsp;·&nbsp; Shared Documents &nbsp;·&nbsp; May 2026</span>
+      <span class="mast-status">Internal · Restricted</span>
     </div>
-    <div class="header-label">Internal · Restricted</div>
   </header>
 
-  <!-- MASTHEAD -->
-  <div class="masthead">
-    <div class="masthead-eyebrow">Shared Documents</div>
-    <h1 class="masthead-title">Files shared by<br><em>the Airnest team</em></h1>
-  </div>
-
-  <!-- MAIN -->
   <main>
 
-    <!-- MEWS CERTIFICATION -->
-    <div class="doc-section">
-      <div class="section-header">
-        <div class="section-label">
-          <div class="section-pip pip-blue"></div>
-          <div class="section-name">Mews Certification</div>
-        </div>
-        <div class="section-count">2 documents</div>
+    <div class="content-block">
+      <div class="col-side">
+        <div class="col-sname">Mews<br>Certification</div>
+        <div class="col-scode">S·01</div>
       </div>
-      <div class="doc-list">
+      <div class="col-docs">
 
-        <a href="mews-certification-meeting-prep-2026-05-11.html" class="doc-row">
-          <div class="doc-icon icon-blue">📋</div>
-          <div class="doc-body">
-            <div class="doc-title">Meeting Prep — Mews Certification Review Call</div>
-            <div class="doc-meta">
-              <span class="doc-tag tag-blue">Meeting prep</span>
-              <span class="doc-date">11 May 2026</span>
+        <a href="mews-certification-meeting-prep-2026-05-11.html" class="toc-entry">
+          <div class="toc-num">01</div>
+          <div>
+            <div class="toc-title-wrap"><span class="toc-title">Meeting Prep — Mews Certification Review Call</span></div>
+            <div class="toc-desc">Briefing for the review call with Milan Bezdecka. Q&A crib sheet, phase roadmap, pre-call checklist.</div>
+            <div class="toc-meta">
+              <span class="toc-tag">Meeting prep</span>
+              <span class="toc-date">11 May 2026</span>
             </div>
-            <span class="doc-desc">Briefing for the 30-min review call with Milan Bezdecka. Q&A crib sheet, phase roadmap, pre-call checklist.</span>
           </div>
-          <div class="doc-arrow">→</div>
+          <div class="toc-arrow">→</div>
         </a>
 
-        <a href="mews-certification-submission-2026-05-08.html" class="doc-row">
-          <div class="doc-icon icon-amber">📄</div>
-          <div class="doc-body">
-            <div class="doc-title">Certification Submission — Status Report</div>
-            <div class="doc-meta">
-              <span class="doc-tag tag-amber">Status report</span>
-              <span class="doc-date">8 May 2026</span>
+        <a href="mews-certification-submission-2026-05-08.html" class="toc-entry">
+          <div class="toc-num">02</div>
+          <div>
+            <div class="toc-title-wrap"><span class="toc-title">Certification Submission — Status Report</span></div>
+            <div class="toc-desc">What was submitted in the Mews Private Integration form — endpoints, webhooks, flagged gaps, questions.</div>
+            <div class="toc-meta">
+              <span class="toc-tag">Status report</span>
+              <span class="toc-date">8 May 2026</span>
             </div>
-            <span class="doc-desc">What was submitted in the Mews Private Integration form — endpoints, webhooks, flagged gaps, questions.</span>
           </div>
-          <div class="doc-arrow">→</div>
+          <div class="toc-arrow">→</div>
         </a>
 
       </div>
     </div>
 
-    <!-- OPERATIONS BRIEFING -->
-    <div class="doc-section">
-      <div class="section-header">
-        <div class="section-label">
-          <div class="section-pip pip-green"></div>
-          <div class="section-name">Operations Briefing</div>
-        </div>
-        <div class="section-count">2 documents</div>
+    <div class="content-block">
+      <div class="col-side">
+        <div class="col-sname">Operations<br>Briefing</div>
+        <div class="col-scode">S·02</div>
       </div>
-      <div class="doc-list">
+      <div class="col-docs">
 
-        <a href="ops-briefing-2026-05-11.html" class="doc-row">
-          <div class="doc-icon icon-green">📊</div>
-          <div class="doc-body">
-            <div class="doc-title">Operations Briefing — Week of 11 May 2026</div>
-            <div class="doc-meta">
-              <span class="doc-tag tag-green">CEO briefing</span>
-              <span class="doc-date">11 May 2026</span>
+        <a href="ops-briefing-2026-05-11.html" class="toc-entry">
+          <div class="toc-num">03</div>
+          <div>
+            <div class="toc-title-wrap"><span class="toc-title">Operations Briefing — Week of 11 May 2026</span></div>
+            <div class="toc-desc">Mews certification complete, Airnest Ops Connector live in production, connector build started.</div>
+            <div class="toc-meta">
+              <span class="toc-tag">CEO briefing</span>
+              <span class="toc-date">11 May 2026</span>
             </div>
-            <span class="doc-desc">Mews certification complete, Airnest Ops Connector live in production, connector build started.</span>
           </div>
-          <div class="doc-arrow">→</div>
+          <div class="toc-arrow">→</div>
         </a>
 
-        <a href="ops-briefing-2026-05-08.html" class="doc-row">
-          <div class="doc-icon icon-green">📊</div>
-          <div class="doc-body">
-            <div class="doc-title">Operations Briefing — Week of 8 May 2026</div>
-            <div class="doc-meta">
-              <span class="doc-tag tag-green">CEO briefing</span>
-              <span class="doc-date">8 May 2026</span>
+        <a href="ops-briefing-2026-05-08.html" class="toc-entry">
+          <div class="toc-num">04</div>
+          <div>
+            <div class="toc-title-wrap"><span class="toc-title">Operations Briefing — Week of 8 May 2026</span></div>
+            <div class="toc-desc">Mews certification submitted, review call booked, mail template pipeline progress, open blockers.</div>
+            <div class="toc-meta">
+              <span class="toc-tag">CEO briefing</span>
+              <span class="toc-date">8 May 2026</span>
             </div>
-            <span class="doc-desc">Mews certification submitted, review call booked, mail template pipeline progress, open blockers.</span>
           </div>
-          <div class="doc-arrow">→</div>
+          <div class="toc-arrow">→</div>
         </a>
 
       </div>
@@ -422,8 +317,8 @@
   </main>
 
   <footer>
-    <div class="footer-copy">Airnest Homes SL · Not for external distribution</div>
-    <div class="footer-copy" style="opacity:0.4;">© 2026</div>
+    <span>Airnest Homes SL</span>
+    <span>Not for external distribution</span>
   </footer>
 
 </body>

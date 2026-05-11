@@ -7,576 +7,611 @@
 <script src="gate.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Exo:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Schibsted+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --charcoal:      #131110;
-    --charcoal-mid:  #1f1b18;
-    --charcoal-soft: #2d2723;
-    --border-dark:   #3a322b;
-    --cream:         #f9f8f6;
-    --cream-dark:    #f0ede8;
-    --sand:          #ddd3c5;
-    --text:          #2a2622;
-    --text-muted:    #7a6e64;
-    --gold:          #c49a52;
-    --gold-light:    #f5ead8;
-    --gold-mid:      #e8d5a8;
-    --terracotta:    #b85c38;
-    --terra-light:   #f8ede7;
-    --olive:         #6b7a48;
-    --olive-light:   #edf0e5;
-    --blue-muted:    #4a6880;
-    --blue-light:    #e8eef5;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:       #F4F1EA;
+  --text:     #141210;
+  --text-2:   #5C5852;
+  --text-3:   #9A9590;
+  --accent:   #B5331A;
+  --border:   #D5D0C8;
+  --border-s: #B0A89E;
+  --surface:  #FDFBF7;
+  --green:    #2E7D4F;
+  --amber:    #9A6008;
+}
 
-  body {
-    font-family: 'Exo', system-ui, sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    font-size: 13.5px;
-    line-height: 1.65;
-    -webkit-font-smoothing: antialiased;
-  }
+body {
+  font-family: 'Schibsted Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--charcoal);
-    color: var(--cream);
-    padding: 40px 52px 36px;
-    position: relative;
-  }
-  header::after {
-    content: '';
-    display: block;
-    position: absolute;
-    bottom: 0; left: 52px; right: 52px;
-    height: 1px;
-    background: var(--border-dark);
-  }
-  .header-logo {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-  }
-  header h1 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 34px;
-    font-weight: 300;
-    letter-spacing: -0.01em;
-    line-height: 1.15;
-    color: var(--cream);
-    margin-bottom: 5px;
-  }
-  header .sub {
-    font-size: 13px;
-    font-weight: 300;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
-  }
-  .header-meta {
-    display: flex;
-    gap: 0;
-    margin-top: 24px;
-    flex-wrap: wrap;
-    border-top: 1px solid var(--border-dark);
-    padding-top: 16px;
-  }
-  .header-meta-item {
-    font-size: 11px;
-    font-weight: 400;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    padding-right: 24px;
-    margin-right: 24px;
-    border-right: 1px solid var(--border-dark);
-    line-height: 1.8;
-  }
-  .header-meta-item:last-child { border-right: none; margin-right: 0; }
-  .header-meta-item strong { color: rgba(249,248,246,0.85); font-weight: 500; display: block; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  /* ── LAYOUT ── */
-  main { max-width: 980px; margin: 0 auto; padding: 44px 32px 72px; }
+/* ── HEADER ── */
+header {
+  padding: 36px 48px 0;
+  animation: fadeUp 0.7s ease 0.05s both;
+}
 
-  .section-label {
-    font-family: 'Exo', system-ui, sans-serif;
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin: 44px 0 16px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--sand);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .section-label::before {
-    content: '';
-    display: inline-block;
-    width: 18px;
-    height: 1px;
-    background: var(--gold);
-  }
+.mast-top-rule { height: 1.5px; background: var(--text); }
 
-  /* ── STATUS STRIP ── */
-  .status-strip {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    background: var(--charcoal-mid);
-    border-radius: 8px;
-    padding: 14px 20px;
-  }
-  .status-strip .status-text {
-    font-size: 13px;
-    color: rgba(249,248,246,0.75);
-    flex: 1;
-    min-width: 200px;
-  }
-  .status-strip .status-text strong { color: var(--cream); }
-  .pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 10.5px;
-    font-weight: 600;
-    padding: 4px 11px;
-    border-radius: 99px;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .pill-olive   { background: var(--olive-light); color: var(--olive); }
-  .pill-gold    { background: var(--gold-light);  color: #8a6a20; }
-  .pill-blue    { background: var(--blue-light);  color: var(--blue-muted); }
-  .pill-terra   { background: var(--terra-light); color: var(--terracotta); }
+.mast-brand-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 14px 0 4px;
+}
 
-  /* ── DEMO GRID ── */
-  .demo-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 8px;
-  }
-  .demo-card {
-    background: #fff;
-    border: 1px solid var(--sand);
-    border-radius: 8px;
-    padding: 13px 15px;
-    border-top: 2px solid var(--olive);
-  }
-  .demo-card.warn  { border-top-color: var(--gold); }
-  .demo-card.skip  { border-top-color: var(--sand); opacity: 0.75; }
-  .demo-card .ep {
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--charcoal-soft);
-    margin-bottom: 4px;
-  }
-  .demo-card .desc {
-    font-size: 11.5px;
-    color: var(--text-muted);
-    margin-bottom: 7px;
-    line-height: 1.5;
-  }
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 99px;
-    letter-spacing: 0.04em;
-  }
-  .badge-pass  { background: var(--olive-light); color: var(--olive); }
-  .badge-warn  { background: var(--gold-light);  color: #8a6a20; }
-  .badge-skip  { background: var(--cream-dark);  color: var(--text-muted); }
+.mast-wordmark {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--text);
+}
 
-  .consequence {
-    margin-top: 8px;
-    padding-top: 8px;
-    border-top: 1px solid var(--cream-dark);
-  }
-  .consequence .gotcha {
-    font-size: 10.5px;
-    color: var(--terracotta);
-    background: var(--terra-light);
-    border-radius: 4px;
-    padding: 3px 7px;
-    margin-bottom: 5px;
-    line-height: 1.45;
-    font-weight: 500;
-  }
-  .consequence .impact {
-    font-size: 10.5px;
-    color: var(--text-muted);
-    line-height: 1.5;
-  }
-  .consequence .impact strong {
-    color: var(--text);
-    font-weight: 600;
-  }
+.back-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--accent); }
 
-  .demo-note {
-    font-size: 11.5px;
-    color: var(--text-muted);
-    margin-top: 12px;
-    font-style: italic;
-  }
-  .demo-note code {
-    font-family: monospace;
-    font-size: 10.5px;
-    background: var(--cream-dark);
-    padding: 1px 4px;
-    border-radius: 3px;
-    font-style: normal;
-  }
+.doc-title {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--text-2);
+  padding-bottom: 14px;
+}
 
-  /* ── SCOPE GRID ── */
-  .scope-grid {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 18px;
-  }
-  @media (max-width: 680px) { .scope-grid { grid-template-columns: 1fr; } }
+.mast-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0 0;
+  border-top: 1.5px solid var(--text);
+}
 
-  .scope-col {
-    background: #fff;
-    border: 1px solid var(--sand);
-    border-radius: 10px;
-    overflow: hidden;
-  }
-  .scope-header {
-    padding: 14px 20px;
-    border-bottom: 1px solid var(--sand);
-  }
-  .scope-header.now   { background: var(--olive-light); }
-  .scope-header.later { background: var(--gold-light); }
-  .scope-header h3 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .scope-header.now h3   { color: var(--olive); }
-  .scope-header.later h3 { color: #8a6a20; }
-  .scope-header p { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.mast-strip span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
 
-  .scope-list { padding: 4px 0; }
-  .scope-list li {
-    list-style: none;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 6px 18px;
-    font-size: 11.5px;
-    border-bottom: 1px solid var(--cream-dark);
-  }
-  .scope-list li:last-child { border-bottom: none; }
-  .scope-list .mono {
-    font-family: 'SF Mono', 'Fira Code', monospace;
-    font-size: 10.5px;
-    font-weight: 600;
-    color: var(--charcoal-soft);
-    flex-shrink: 0;
-    width: 180px;
-    min-width: 0;
-    word-break: break-all;
-  }
-  .scope-list .mono.wh { color: var(--blue-muted); }
-  .scope-list .why { font-size: 11px; color: var(--text-muted); }
-  .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-  .dot-olive { background: var(--olive); }
-  .dot-gold  { background: var(--gold); }
-  .dot-blue  { background: var(--blue-muted); }
+.mast-meta { color: var(--text-3); }
+.mast-status { color: var(--accent); }
 
-  .scope-col:last-child .scope-list li { flex-wrap: wrap; gap: 4px; }
-  .scope-col:last-child .scope-list .mono { width: auto; }
+/* ── MAIN ── */
+main { flex: 1; padding: 0 48px 72px; }
 
-  /* ── NEXT STEPS ── */
-  .next-steps {
-    background: var(--charcoal);
-    color: rgba(249,248,246,0.8);
-    border-radius: 10px;
-    padding: 24px 28px;
-    margin-top: 20px;
-  }
-  .next-steps h3 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 20px;
-    font-weight: 300;
-    color: var(--gold);
-    margin-bottom: 16px;
-    letter-spacing: 0.02em;
-  }
-  .next-steps ol {
-    padding-left: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .next-steps ol li {
-    font-size: 13px;
-    line-height: 1.65;
-  }
-  .next-steps ol li strong { color: var(--cream); }
-  .next-steps ol li span { color: rgba(249,248,246,0.55); font-size: 12px; }
+/* ── SECTION BLOCK ── */
+.section-block {
+  border-top: 1px solid var(--border);
+  margin-top: 44px;
+  padding-top: 28px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease both;
+}
+.section-block:nth-child(1) { animation-delay: 0.28s; }
+.section-block:nth-child(2) { animation-delay: 0.38s; }
+.section-block:nth-child(3) { animation-delay: 0.46s; }
+.section-block:nth-child(4) { animation-delay: 0.54s; }
 
-  /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    padding: 28px;
-    font-size: 11px;
-    color: var(--text-muted);
-    border-top: 1px solid var(--sand);
-  }
+.section-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
 
-  /* ── PRINT ── */
-  @media print {
-    body { background: white; }
-    header, .next-steps, .status-strip {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-    .scope-header, .demo-card, .badge, .pill, .consequence .gotcha {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
-    main { padding: 20px 24px 32px; }
-    .section-label { margin-top: 24px; margin-bottom: 12px; }
-    .demo-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-    .demo-card { padding: 10px 12px; }
-    a { color: inherit; text-decoration: none; }
-    .next-steps-wrapper { page-break-inside: avoid; break-inside: avoid; }
-    .next-steps { margin-top: 14px; padding: 18px 22px; }
-    .scope-grid { page-break-inside: avoid; break-inside: avoid; }
-    .status-strip { page-break-inside: avoid; break-inside: avoid; }
-  }
+.section-heading {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 22px;
+}
+
+/* ── STATUS STRIP ── */
+.status-strip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  padding: 16px 20px;
+  background: var(--surface);
+}
+
+.status-strip .status-text {
+  font-size: 13.5px;
+  color: var(--text-2);
+  flex: 1;
+  min-width: 200px;
+  line-height: 1.6;
+}
+.status-strip .status-text strong { color: var(--text); font-weight: 600; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 3px 10px;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pill-olive { background: rgba(46,125,79,0.07); color: var(--green); border: 1px solid rgba(46,125,79,0.2); }
+.pill-gold  { background: rgba(154,96,8,0.07); color: var(--amber); border: 1px solid rgba(154,96,8,0.2); }
+
+/* ── DEMO GRID ── */
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+}
+
+.demo-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 13px 15px;
+  border-top: 2px solid var(--green);
+}
+.demo-card.warn { border-top-color: var(--amber); }
+.demo-card.skip { border-top-color: var(--border); opacity: 0.75; }
+
+.demo-card .ep {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.demo-card .desc {
+  font-size: 11.5px;
+  color: var(--text-3);
+  margin-bottom: 7px;
+  line-height: 1.5;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  letter-spacing: 0.04em;
+}
+.badge-pass { background: rgba(46,125,79,0.07); color: var(--green); border: 1px solid rgba(46,125,79,0.2); }
+.badge-warn { background: rgba(154,96,8,0.07); color: var(--amber); border: 1px solid rgba(154,96,8,0.2); }
+.badge-skip { background: var(--bg); color: var(--text-3); border: 1px solid var(--border); }
+
+.consequence {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.consequence .gotcha {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--accent);
+  background: rgba(181,51,26,0.05);
+  border: 1px solid rgba(181,51,26,0.15);
+  padding: 3px 7px;
+  margin-bottom: 5px;
+  line-height: 1.45;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  display: block;
+}
+
+.consequence .impact {
+  font-size: 10.5px;
+  color: var(--text-3);
+  line-height: 1.5;
+}
+.consequence .impact strong { color: var(--text-2); font-weight: 600; }
+.consequence .impact code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--text-2);
+  background: var(--bg);
+  padding: 1px 4px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+}
+
+.demo-note {
+  font-size: 11.5px;
+  color: var(--text-3);
+  margin-top: 12px;
+  font-style: italic;
+}
+.demo-note code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 1px 4px;
+  font-style: normal;
+}
+
+/* ── SCOPE GRID ── */
+.scope-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 18px;
+}
+@media (max-width: 680px) { .scope-grid { grid-template-columns: 1fr; } }
+
+.scope-col {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.scope-header {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.scope-header.now   { background: rgba(46,125,79,0.05); border-bottom-color: rgba(46,125,79,0.2); }
+.scope-header.later { background: rgba(154,96,8,0.05); border-bottom-color: rgba(154,96,8,0.2); }
+
+.scope-header h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.scope-header.now h3   { color: var(--green); }
+.scope-header.later h3 { color: var(--amber); }
+.scope-header p { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+.scope-list { padding: 4px 0; }
+.scope-list li {
+  list-style: none;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 18px;
+  font-size: 11.5px;
+  border-bottom: 1px solid rgba(212,208,200,0.5);
+}
+.scope-list li:last-child { border-bottom: none; }
+
+.scope-list .mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+  width: 180px;
+  min-width: 0;
+  word-break: break-all;
+}
+.scope-list .mono.wh { color: var(--text-2); }
+.scope-list .why { font-size: 11px; color: var(--text-3); }
+
+.dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+.dot-olive { background: var(--green); }
+.dot-gold  { background: var(--amber); }
+.dot-blue  { background: var(--border-s); }
+
+.scope-col:last-child .scope-list li { flex-wrap: wrap; gap: 4px; }
+.scope-col:last-child .scope-list .mono { width: auto; }
+
+/* ── NEXT STEPS ── */
+.next-steps {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  padding: 24px 28px;
+}
+
+.next-steps h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.next-steps ol {
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.next-steps ol li { font-size: 13.5px; line-height: 1.65; color: var(--text-2); }
+.next-steps ol li strong { color: var(--text); font-weight: 600; }
+.next-steps ol li span { color: var(--text-3); font-size: 12.5px; }
+
+/* ── FOOTER ── */
+footer {
+  padding: 16px 48px;
+  border-top: 1.5px solid var(--text);
+  display: flex;
+  justify-content: space-between;
+  animation: fadeUp 0.5s ease 0.58s both;
+}
+footer span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* ── MOBILE ── */
+@media (max-width: 620px) {
+  header, main { padding-left: 24px; padding-right: 24px; }
+  footer { padding: 14px 24px; flex-direction: column; gap: 6px; }
+  .mast-brand-row { flex-wrap: wrap; gap: 8px; }
+  .demo-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="header-logo">Airnest · Mews Integration</div>
-  <h1>API Integration<br><em style="font-style:italic;font-weight:300;">Status Report</em></h1>
-  <p class="sub">Demo Test Results &amp; Certification Scope</p>
-  <div class="header-meta">
-    <div class="header-meta-item"><strong>May 7, 2026</strong>Date</div>
-    <div class="header-meta-item"><strong>INT003752</strong>Partner ID</div>
-    <div class="header-meta-item"><strong>Milan Bezdecka</strong>Mews TPSM</div>
-    <div class="header-meta-item"><strong>Mews Demo</strong>Environment</div>
-    <div class="header-meta-item"><strong>Hotel Bandama Golf BGH</strong>Test Property</div>
+  <div class="mast-top-rule"></div>
+  <div class="mast-brand-row">
+    <span class="mast-wordmark">AIRNEST</span>
+    <a href="index.html" class="back-link">← Shared-Airnest</a>
+  </div>
+  <div class="doc-title">Mews API Integration — Status Report</div>
+  <div class="mast-strip">
+    <span class="mast-meta">2026-05-07 &nbsp;·&nbsp; INT003752 &nbsp;·&nbsp; Demo Environment &nbsp;·&nbsp; Hotel Bandama Golf BGH</span>
+    <span class="mast-status">Integration Report · Internal</span>
   </div>
 </header>
 
 <main>
 
   <!-- ── STATUS ── -->
-  <div class="section-label">Status</div>
+  <div class="section-block">
+    <div class="section-cat">Status</div>
+    <h2 class="section-heading">Overview</h2>
 
-  <div class="status-strip">
-    <div class="status-text">
-      <strong>Partner accepted 5 May 2026</strong> (INT003752). All 13 required endpoints tested and confirmed in demo. Certification form and review-call link received from Milan. No blockers.
+    <div class="status-strip">
+      <div class="status-text">
+        <strong>Partner accepted 5 May 2026</strong> (INT003752). All 13 required endpoints tested and confirmed in demo. Certification form and review-call link received from Milan. No blockers.
+      </div>
+      <span class="pill pill-olive">✓ Partner accepted</span>
+      <span class="pill pill-olive">✓ 13/13 endpoints tested</span>
+      <span class="pill pill-gold">Form received — ready to submit</span>
     </div>
-    <span class="pill pill-olive">✓ Partner accepted</span>
-    <span class="pill pill-olive">✓ 13/13 endpoints tested</span>
-    <span class="pill pill-gold">Form received — ready to submit</span>
   </div>
 
 
   <!-- ── DEMO TEST RESULTS ── -->
-  <div class="section-label">1 — Demo Test Results · 2026-05-07</div>
+  <div class="section-block">
+    <div class="section-cat">1 — Demo Test Results · 2026-05-07</div>
+    <h2 class="section-heading">Demo Test Results</h2>
 
-  <div class="demo-grid">
+    <div class="demo-grid">
 
-    <div class="demo-card">
-      <div class="ep">configuration/get</div>
-      <div class="desc">Property identity, timezone, enterprise ID</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
-    <div class="demo-card">
-      <div class="ep">services/getAll</div>
-      <div class="desc">Accommodation service IDs</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
-    <div class="demo-card">
-      <div class="ep">resources/getAll</div>
-      <div class="desc">18 rooms with states &amp; categories</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
-    <div class="demo-card warn">
-      <div class="ep">resourceCategories/getAll</div>
-      <div class="desc">5 room types confirmed</div>
-      <span class="badge badge-pass">✓ Passed</span>
-      <div class="consequence">
-        <div class="gotcha">⚠ Requires ServiceIds in body</div>
-        <div class="impact"><strong>Impact:</strong> If our accommodation ServiceId changes after a Mews update, the call fails and the direct booking engine returns no room types — blocking all bookings until the ID is refreshed.</div>
+      <div class="demo-card">
+        <div class="ep">configuration/get</div>
+        <div class="desc">Property identity, timezone, enterprise ID</div>
+        <span class="badge badge-pass">✓ Passed</span>
       </div>
-    </div>
 
-    <div class="demo-card">
-      <div class="ep">ageCategories/getAll</div>
-      <div class="desc">Adults / Children IDs for guest counts</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
-    <div class="demo-card">
-      <div class="ep">rates/getAll</div>
-      <div class="desc">1 rate plan found: "Fully Flexible"</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
-    <div class="demo-card warn">
-      <div class="ep">reservations/getAll</div>
-      <div class="desc">53 reservations — 51 Confirmed, 2 Started</div>
-      <span class="badge badge-pass">✓ Passed</span>
-      <div class="consequence">
-        <div class="gotcha">⚠ Max date interval: 100 days</div>
-        <div class="impact"><strong>Impact:</strong> Any annual or quarterly report requires ≥4 chunked calls. If Ops Brain's nightly sync sends a single full-year request, it errors silently — occupancy, ADR and RevPAR figures in the dashboard will be incomplete or wrong.</div>
+      <div class="demo-card">
+        <div class="ep">services/getAll</div>
+        <div class="desc">Accommodation service IDs</div>
+        <span class="badge badge-pass">✓ Passed</span>
       </div>
-    </div>
 
-    <div class="demo-card warn">
-      <div class="ep">reservations/add</div>
-      <div class="desc">Test reservation created &amp; round-trip verified</div>
-      <span class="badge badge-pass">✓ Passed</span>
-      <div class="consequence">
-        <div class="gotcha">⚠ ID nested at Reservations[0].Reservation.Id</div>
-        <div class="impact"><strong>Impact:</strong> Reading the response at the wrong path loses the reservation ID immediately after creation. The direct booking confirmation has no reference number; the guest cannot be looked up by reservation ID and the booking is untracked in Ops Brain.</div>
+      <div class="demo-card">
+        <div class="ep">resources/getAll</div>
+        <div class="desc">18 rooms with states &amp; categories</div>
+        <span class="badge badge-pass">✓ Passed</span>
       </div>
-    </div>
 
-    <div class="demo-card">
-      <div class="ep">services/getAvailability</div>
-      <div class="desc">5 category slots, 32-day availability window</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
-    <div class="demo-card warn">
-      <div class="ep">customers/getAll</div>
-      <div class="desc">Lookup by email and CreatedUtc — round-trip confirmed</div>
-      <span class="badge badge-pass">✓ Passed</span>
-      <div class="consequence">
-        <div class="gotcha">⚠ Filter required — no open fetch</div>
-        <div class="impact"><strong>Impact:</strong> Ops Brain cannot bulk-export all guest profiles. The guest table must be built reactively via <code>CustomerAdded</code> webhooks. Webhook gaps = holes in return-guest detection and nationality analytics.</div>
+      <div class="demo-card warn">
+        <div class="ep">resourceCategories/getAll</div>
+        <div class="desc">5 room types confirmed</div>
+        <span class="badge badge-pass">✓ Passed</span>
+        <div class="consequence">
+          <span class="gotcha">⚠ Requires ServiceIds in body</span>
+          <div class="impact"><strong>Impact:</strong> If our accommodation ServiceId changes after a Mews update, the call fails and the direct booking engine returns no room types — blocking all bookings until the ID is refreshed.</div>
+        </div>
       </div>
-    </div>
 
-    <div class="demo-card warn">
-      <div class="ep">customers/add</div>
-      <div class="desc">New customer created &amp; retrieved by email</div>
-      <span class="badge badge-pass">✓ Passed</span>
-      <div class="consequence">
-        <div class="gotcha">⚠ 400 error on duplicate email</div>
-        <div class="impact"><strong>Impact:</strong> ~30–40% of direct booking visitors are returning guests already in Mews. Blindly calling <code>customers/add</code> will fail for them and break the booking flow. We must always check by email first, then conditionally create.</div>
+      <div class="demo-card">
+        <div class="ep">ageCategories/getAll</div>
+        <div class="desc">Adults / Children IDs for guest counts</div>
+        <span class="badge badge-pass">✓ Passed</span>
       </div>
+
+      <div class="demo-card">
+        <div class="ep">rates/getAll</div>
+        <div class="desc">1 rate plan found: "Fully Flexible"</div>
+        <span class="badge badge-pass">✓ Passed</span>
+      </div>
+
+      <div class="demo-card warn">
+        <div class="ep">reservations/getAll</div>
+        <div class="desc">53 reservations — 51 Confirmed, 2 Started</div>
+        <span class="badge badge-pass">✓ Passed</span>
+        <div class="consequence">
+          <span class="gotcha">⚠ Max date interval: 100 days</span>
+          <div class="impact"><strong>Impact:</strong> Any annual or quarterly report requires ≥4 chunked calls. If Ops Brain's nightly sync sends a single full-year request, it errors silently — occupancy, ADR and RevPAR figures in the dashboard will be incomplete or wrong.</div>
+        </div>
+      </div>
+
+      <div class="demo-card warn">
+        <div class="ep">reservations/add</div>
+        <div class="desc">Test reservation created &amp; round-trip verified</div>
+        <span class="badge badge-pass">✓ Passed</span>
+        <div class="consequence">
+          <span class="gotcha">⚠ ID nested at Reservations[0].Reservation.Id</span>
+          <div class="impact"><strong>Impact:</strong> Reading the response at the wrong path loses the reservation ID immediately after creation. The direct booking confirmation has no reference number; the guest cannot be looked up by reservation ID and the booking is untracked in Ops Brain.</div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="ep">services/getAvailability</div>
+        <div class="desc">5 category slots, 32-day availability window</div>
+        <span class="badge badge-pass">✓ Passed</span>
+      </div>
+
+      <div class="demo-card warn">
+        <div class="ep">customers/getAll</div>
+        <div class="desc">Lookup by email and CreatedUtc — round-trip confirmed</div>
+        <span class="badge badge-pass">✓ Passed</span>
+        <div class="consequence">
+          <span class="gotcha">⚠ Filter required — no open fetch</span>
+          <div class="impact"><strong>Impact:</strong> Ops Brain cannot bulk-export all guest profiles. The guest table must be built reactively via <code>CustomerAdded</code> webhooks. Webhook gaps = holes in return-guest detection and nationality analytics.</div>
+        </div>
+      </div>
+
+      <div class="demo-card warn">
+        <div class="ep">customers/add</div>
+        <div class="desc">New customer created &amp; retrieved by email</div>
+        <span class="badge badge-pass">✓ Passed</span>
+        <div class="consequence">
+          <span class="gotcha">⚠ 400 error on duplicate email</span>
+          <div class="impact"><strong>Impact:</strong> ~30–40% of direct booking visitors are returning guests already in Mews. Blindly calling <code>customers/add</code> will fail for them and break the booking flow. We must always check by email first, then conditionally create.</div>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <div class="ep">bills/getAll</div>
+        <div class="desc">Endpoint functional — 0 bills in demo (expected)</div>
+        <span class="badge badge-pass">✓ Passed</span>
+      </div>
+
+      <div class="demo-card">
+        <div class="ep">payments/getAll</div>
+        <div class="desc">Endpoint functional — 0 payments in demo (expected)</div>
+        <span class="badge badge-pass">✓ Passed</span>
+      </div>
+
     </div>
 
-    <div class="demo-card">
-      <div class="ep">bills/getAll</div>
-      <div class="desc">Endpoint functional — 0 bills in demo (expected)</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
-    <div class="demo-card">
-      <div class="ep">payments/getAll</div>
-      <div class="desc">Endpoint functional — 0 payments in demo (expected)</div>
-      <span class="badge badge-pass">✓ Passed</span>
-    </div>
-
+    <p class="demo-note">
+      Bills and payments return 0 results in demo — expected, both confirmed accessible (HTTP 200).
+      <code>enterprises/getAll</code> skipped — requires portfolio-level auth; <code>configuration/get</code> covers property identity with our standard token.
+      Test scripts: <code>Mews_API_Connector/01_API_Connector/</code>
+    </p>
   </div>
-
-  <p class="demo-note">
-    Bills and payments return 0 results in demo — expected, both confirmed accessible (HTTP 200).
-    <code>enterprises/getAll</code> skipped — requires portfolio-level auth; <code>configuration/get</code> covers property identity with our standard token.
-    Test scripts: <code>Mews_API_Connector/01_API_Connector/</code>
-  </p>
 
 
   <!-- ── CERTIFICATION SCOPE ── -->
-  <div class="section-label">2 — Certification Request Scope</div>
+  <div class="section-block">
+    <div class="section-cat">2 — Certification Scope</div>
+    <h2 class="section-heading">Certification Request Scope</h2>
 
-  <div class="scope-grid">
+    <div class="scope-grid">
 
-    <div class="scope-col">
-      <div class="scope-header now">
-        <h3>Initial Certification — Request Now</h3>
-        <p>13 endpoints + 5 webhooks · Operational reporting, management dashboard, direct booking sync</p>
+      <div class="scope-col">
+        <div class="scope-header now">
+          <h3>Initial Certification — Request Now</h3>
+          <p>13 endpoints + 5 webhooks · Operational reporting, management dashboard, direct booking sync</p>
+        </div>
+        <ul class="scope-list">
+          <li><div class="dot dot-olive"></div><span class="mono">configuration/get</span><span class="why">Property identity &amp; timezone</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">services/getAll</span><span class="why">Accommodation service discovery</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">services/getAvailability</span><span class="why">Live availability for direct booking</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">resources/getAll</span><span class="why">Room inventory</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">resourceCategories/getAll</span><span class="why">Room types</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">ageCategories/getAll</span><span class="why">Guest counts for reservations</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">rates/getAll</span><span class="why">Rate plan visibility &amp; parity</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">reservations/getAll</span><span class="why">Dashboard, occupancy, channel mix</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">reservations/add</span><span class="why">Direct booking creation</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">customers/getAll</span><span class="why">Guest lookup &amp; return detection</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">customers/add</span><span class="why">Guest profile creation</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">bills/getAll</span><span class="why">Revenue &amp; invoice data</span></li>
+          <li><div class="dot dot-olive"></div><span class="mono">payments/getAll</span><span class="why">Payment settlement &amp; reconciliation</span></li>
+          <li style="border-top:1px solid var(--border);margin-top:4px;padding-top:8px;">
+            <div class="dot dot-blue"></div><span class="mono wh">ServiceOrderUpdated ⚡</span><span class="why">Real-time reservation sync</span>
+          </li>
+          <li><div class="dot dot-blue"></div><span class="mono wh">PaymentUpdated ⚡</span><span class="why">Payment reconciliation trigger</span></li>
+          <li><div class="dot dot-blue"></div><span class="mono wh">CustomerAdded ⚡</span><span class="why">Real-time guest sync</span></li>
+          <li><div class="dot dot-blue"></div><span class="mono wh">CustomerUpdated ⚡</span><span class="why">Profile &amp; consent changes</span></li>
+          <li><div class="dot dot-blue"></div><span class="mono wh">ResourceUpdated ⚡</span><span class="why">Room state changes (housekeeping)</span></li>
+        </ul>
       </div>
-      <ul class="scope-list">
-        <li><div class="dot dot-olive"></div><span class="mono">configuration/get</span><span class="why">Property identity &amp; timezone</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">services/getAll</span><span class="why">Accommodation service discovery</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">services/getAvailability</span><span class="why">Live availability for direct booking</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">resources/getAll</span><span class="why">Room inventory</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">resourceCategories/getAll</span><span class="why">Room types</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">ageCategories/getAll</span><span class="why">Guest counts for reservations</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">rates/getAll</span><span class="why">Rate plan visibility &amp; parity</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">reservations/getAll</span><span class="why">Dashboard, occupancy, channel mix</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">reservations/add</span><span class="why">Direct booking creation</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">customers/getAll</span><span class="why">Guest lookup &amp; return detection</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">customers/add</span><span class="why">Guest profile creation</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">bills/getAll</span><span class="why">Revenue &amp; invoice data</span></li>
-        <li><div class="dot dot-olive"></div><span class="mono">payments/getAll</span><span class="why">Payment settlement &amp; reconciliation</span></li>
-        <li style="border-top:1px solid var(--sand);margin-top:4px;padding-top:8px;">
-          <div class="dot dot-blue"></div><span class="mono wh">ServiceOrderUpdated ⚡</span><span class="why">Real-time reservation sync</span>
-        </li>
-        <li><div class="dot dot-blue"></div><span class="mono wh">PaymentUpdated ⚡</span><span class="why">Payment reconciliation trigger</span></li>
-        <li><div class="dot dot-blue"></div><span class="mono wh">CustomerAdded ⚡</span><span class="why">Real-time guest sync</span></li>
-        <li><div class="dot dot-blue"></div><span class="mono wh">CustomerUpdated ⚡</span><span class="why">Profile &amp; consent changes</span></li>
-        <li><div class="dot dot-blue"></div><span class="mono wh">ResourceUpdated ⚡</span><span class="why">Room state changes (housekeeping)</span></li>
-      </ul>
-    </div>
 
-    <div class="scope-col">
-      <div class="scope-header later">
-        <h3>Later — Phase 6 Only</h3>
-        <p>Add as a scope amendment when Ops Brain Phase 6 (Tax &amp; Finance) ships. Not needed now.</p>
+      <div class="scope-col">
+        <div class="scope-header later">
+          <h3>Later — Phase 6 Only</h3>
+          <p>Add as a scope amendment when Ops Brain Phase 6 (Tax &amp; Finance) ships. Not needed now.</p>
+        </div>
+        <ul class="scope-list">
+          <li><div class="dot dot-gold"></div><span class="mono">accountingItems/getAll</span><span class="why">Revenue line breakdown for IGIC / Modelo 179</span></li>
+          <li><div class="dot dot-gold"></div><span class="mono">accountingCategories/getAll</span><span class="why">Maps revenue lines to accounting categories</span></li>
+          <li><div class="dot dot-gold"></div><span class="mono">bills/getPdf</span><span class="why">PDF invoice generation for owner monthly packs</span></li>
+        </ul>
       </div>
-      <ul class="scope-list">
-        <li><div class="dot dot-gold"></div><span class="mono">accountingItems/getAll</span><span class="why">Revenue line breakdown for IGIC / Modelo 179</span></li>
-        <li><div class="dot dot-gold"></div><span class="mono">accountingCategories/getAll</span><span class="why">Maps revenue lines to accounting categories</span></li>
-        <li><div class="dot dot-gold"></div><span class="mono">bills/getPdf</span><span class="why">PDF invoice generation for owner monthly packs</span></li>
-      </ul>
-    </div>
 
+    </div>
   </div>
 
 
   <!-- ── NEXT STEPS ── -->
-  <div class="next-steps-wrapper">
-  <div class="section-label">3 — Next Steps</div>
-  <div class="next-steps">
-    <h3>Action Plan</h3>
-    <ol>
-      <li>
-        <strong>Fill the Certification Form.</strong>
-        <span>List the 13 endpoints and 5 webhook types above. Use the three use cases declared in our May 5 email to Mews: operational reporting, management dashboard, direct booking sync. Keep scope exactly as listed — minimal scope means faster approval.</span>
-      </li>
-      <li>
-        <strong>Book the review call with Milan's team.</strong>
-        <span>The booking link came with the certification emails. This is the final step before Mews issues our production Client Token.</span>
-      </li>
-    </ol>
+  <div class="section-block">
+    <div class="section-cat">3 — Action Plan</div>
+    <h2 class="section-heading">Next Steps</h2>
+
+    <div class="next-steps">
+      <h3>Action Plan</h3>
+      <ol>
+        <li>
+          <strong>Fill the Certification Form.</strong>
+          <span>List the 13 endpoints and 5 webhook types above. Use the three use cases declared in our May 5 email to Mews: operational reporting, management dashboard, direct booking sync. Keep scope exactly as listed — minimal scope means faster approval.</span>
+        </li>
+        <li>
+          <strong>Book the review call with Milan's team.</strong>
+          <span>The booking link came with the certification emails. This is the final step before Mews issues our production Client Token.</span>
+        </li>
+      </ol>
+    </div>
   </div>
-  </div><!-- end next-steps-wrapper -->
 
 </main>
 
 <footer>
-  Airnest Homes SL &mdash; Internal only &mdash; Not for distribution &mdash; Generated 2026-05-07
-  &nbsp;&nbsp;·&nbsp;&nbsp;
-  <em>Platform opportunity ~€810K/yr on €4M revenue (labour reduction, ADR uplift, direct bookings, compliance)</em>
+  <span>Airnest Homes SL</span>
+  <span>Not for external distribution</span>
 </footer>
 
 </body>

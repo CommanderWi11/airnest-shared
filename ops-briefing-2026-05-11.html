@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operations Briefing — Week of 2026-05-11 · Airnest</title>
+<script src="gate.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary:        #0077BB;
+  --primary-dim:    rgba(0,119,187,0.09);
+  --primary-faint:  rgba(0,119,187,0.045);
+  --primary-border: rgba(0,119,187,0.18);
+  --text:           #0f1923;
+  --text-strong:    #080d14;
+  --muted:          #516070;
+  --bg:             #f3f7fb;
+  --surface:        #ffffff;
+  --surface-2:      #eef4f9;
+  --surface-3:      #e5eef6;
+  --border:         rgba(0,30,60,0.09);
+  --border-solid:   #cddae6;
+  --warn:           #c93510;
+  --warn-dim:       rgba(201,53,16,0.07);
+  --warn-border:    rgba(201,53,16,0.2);
+  --green:          #147a44;
+  --green-dim:      rgba(20,122,68,0.08);
+  --green-border:   rgba(20,122,68,0.22);
+  --amber:          #9a6008;
+  --amber-dim:      rgba(154,96,8,0.08);
+  --amber-border:   rgba(154,96,8,0.22);
+  --header-bg:      #0c1420;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes lineDraw {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--header-bg);
+  padding: 44px 60px 40px;
+  border-bottom: 1px solid #1a2d3f;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -50px;
+  width: 360px; height: 360px;
+  background: radial-gradient(circle, rgba(0,119,187,0.1) 0%, transparent 65%);
+  pointer-events: none;
+}
+header::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #0077BB 30%, #00AADD 58%, transparent 100%);
+  opacity: 0.7;
+  animation: lineDraw 1.1s ease 0.1s both;
+}
+
+.header-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s ease both;
+}
+.header-left { flex: 1; }
+
+.brand-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #00AADD;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.2s forwards;
+}
+.brand-tag::before {
+  content: '';
+  display: inline-block;
+  width: 26px; height: 1px;
+  background: #00AADD;
+  opacity: 0.5;
+}
+
+.brand-name {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-size: 42px;
+  color: #edf5fc;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+.brand-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  color: #0077BB;
+  text-transform: uppercase;
+  margin-top: 7px;
+}
+
+.doc-title {
+  font-family: 'DM Serif Display', Georgia, serif;
+  font-style: italic;
+  font-size: 28px;
+  color: rgba(237,245,252,0.82);
+  font-weight: 400;
+  line-height: 1.22;
+  margin: 28px 0 7px;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.35s forwards;
+}
+.doc-sub {
+  font-size: 12px;
+  font-weight: 300;
+  color: #4a6a84;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.42s forwards;
+}
+
+.header-rule {
+  border: none;
+  border-top: 1px solid #1e3048;
+  margin: 28px 0 20px;
+  position: relative; z-index: 1;
+  opacity: 0;
+  animation: fadeUp 0.4s ease 0.48s forwards;
+}
+
+.header-meta {
+  display: flex; gap: 0; flex-wrap: wrap;
+  position: relative; z-index: 1;
+  opacity: 0;
+  animation: fadeUp 0.5s ease 0.52s forwards;
+}
+.header-meta-item {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #4a6a84;
+  padding-right: 26px; margin-right: 26px;
+  border-right: 1px solid #1e3048;
+  line-height: 1.9;
+}
+.header-meta-item:last-child { border-right: none; margin-right: 0; }
+.header-meta-item strong {
+  color: #d8eaf4;
+  font-weight: 700;
+  display: block;
+  font-size: 11.5px;
+}
+
+/* ── LAYOUT ── */
+main { max-width: 760px; margin: 0 auto; padding: 56px 40px 100px; }
+
+/* ── SECTION ── */
+.section-wrap { position: relative; margin-top: 56px; }
+
+.section-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.section-heading {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--text-strong);
+  line-height: 1.2;
+  margin-bottom: 22px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-solid);
+}
+
+/* ── BRIEF LIST ── */
+.brief-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--border-solid);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,30,60,0.06);
+}
+.brief-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-solid);
+  font-size: 13.5px;
+  line-height: 1.6;
+  transition: background 0.1s;
+}
+.brief-item:last-child { border-bottom: none; }
+.brief-item:hover { background: var(--surface-2); }
+
+.brief-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.dot-green { background: var(--green); }
+.dot-amber { background: var(--amber); }
+.dot-warn  { background: var(--warn); }
+
+/* ── NEXT BLOCK ── */
+.next-block {
+  background: var(--primary-faint);
+  border: 1px solid var(--primary-border);
+  border-radius: 12px;
+  padding: 22px 28px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--text);
+}
+.next-block strong { color: var(--primary); font-weight: 600; }
+.next-block code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--primary);
+  background: var(--primary-faint);
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--primary-border);
+}
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 20px 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  color: var(--muted);
+  border-top: 1px solid var(--border-solid);
+  letter-spacing: 0.05em;
+  margin-top: 60px;
+  background: var(--surface);
+  opacity: 0.65;
+}
+
+/* ── PRINT ── */
+@media print {
+  * { animation: none !important; opacity: 1 !important; }
+  body { background: white; font-size: 11px; }
+  header { -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 22px 36px 18px; }
+  header::before, header::after { display: none; }
+  main { padding: 16px 28px 32px; }
+  .section-wrap { margin-top: 24px; }
+  .brief-item { break-inside: avoid; }
+  .next-block { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-layout">
+    <div class="header-left">
+      <div class="brand-tag">Airnest Homes SL &mdash; Internal</div>
+      <div class="brand-name">AIRNEST</div>
+      <div class="brand-sub">Operations Briefing</div>
+      <div class="doc-title">Week of 2026-05-11</div>
+      <p class="doc-sub">Tech &amp; Integration Summary &middot; Prepared by Luis Navarro &middot; For Javier Navarro (CEO)</p>
+    </div>
+  </div>
+  <hr class="header-rule">
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>2026-05-05 → 2026-05-11</strong>Period</div>
+    <div class="header-meta-item"><strong>Luis Navarro</strong>Prepared by</div>
+    <div class="header-meta-item"><strong>Javier Navarro</strong>For</div>
+    <div class="header-meta-item"><strong>Tech &amp; Integration</strong>Scope</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── DONE ── -->
+  <div class="section-wrap">
+    <div class="section-cat">This Week</div>
+    <h2 class="section-heading">Done</h2>
+
+    <div class="brief-list">
+      <div class="brief-item">
+        <span class="brief-dot dot-green"></span>
+        Mews Connector API client built (<code style="font-family:'JetBrains Mono',monospace;font-size:11.5px;background:#eef4f9;padding:1px 5px;border-radius:3px;border:1px solid #cddae6;">mews_client.py</code>) — rate-limited, cursor-paginated, zero external dependencies; reusable across all Mews projects
+      </div>
+      <div class="brief-item">
+        <span class="brief-dot dot-green"></span>
+        Mews certification review confirmed in progress on Mews' end (INT003752) — no call required; Mews notified 2026-05-11
+      </div>
+      <div class="brief-item">
+        <span class="brief-dot dot-green"></span>
+        Hetzner VPS account verified (2026-05-10) — webhook endpoint infrastructure ready to provision
+      </div>
+      <div class="brief-item">
+        <span class="brief-dot dot-green"></span>
+        BGH Confirmation mail template import pipeline shipped: token mapper, BEE JSON generator, and import scripts committed to Guesty_Migration
+      </div>
+      <div class="brief-item">
+        <span class="brief-dot dot-green"></span>
+        Template migration strategy locked: placeholder variables, 6 properties, live Mews site — Arena-Cielo next after BGH
+      </div>
+      <div class="brief-item">
+        <span class="brief-dot dot-green"></span>
+        Flexkeeping: Mariana added to Mews environment by Vito Pavelic (2026-05-11)
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NEXT ── -->
+  <div class="section-wrap">
+    <div class="section-cat">Focus</div>
+    <h2 class="section-heading">Next</h2>
+
+    <div class="next-block">
+      Await <strong>Mews certification outcome</strong> — production tokens are the gate for everything downstream.
+      In parallel: provision <strong>FastAPI webhook endpoint</strong> on Hetzner VPS and extend mail template migration
+      from BGH to remaining 5 properties (Arena-Cielo first).
+    </div>
+  </div>
+
+  <!-- ── BLOCKERS ── -->
+  <div class="section-wrap">
+    <div class="section-cat">Attention Required</div>
+    <h2 class="section-heading">Blockers</h2>
+
+    <div class="brief-list">
+      <div class="brief-item">
+        <span class="brief-dot dot-warn"></span>
+        GuestyPay rejected payouts dispute escalating — Guesty pushing for CEO meeting; exit decision is firm but resolution may affect data portability timeline
+      </div>
+      <div class="brief-item">
+        <span class="brief-dot dot-amber"></span>
+        Anna Adamczyk (Mews) kick-off dates for remaining 7 properties still unanswered — reply needed
+      </div>
+      <div class="brief-item">
+        <span class="brief-dot dot-amber"></span>
+        SiteMinder portfolio proposal received from Noelia (2026-05-11) — decision needed
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Airnest Homes SL &middot; Confidential internal briefing &middot; 2026-05-11
+</footer>
+
+</body>
+</html>
